@@ -1,0 +1,34 @@
+---
+title: "DeSeq"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+library("DESeq2")
+
+# On considère que les données sont déjà formatées avant le traitement par R
+
+# Création d'un objet DESeqDataSet (dds) avec la matrice et les données de colonnes
+
+notresetdedonnees <- DESeqDataSetFromMatrix(countData = notrematrice, colData = nosdonneesdecolonnes, design = ~ echantillons + condition)
+
+```
+
+```{r}
+# analyse d'expression différentielle sur notre dds
+
+notresetdedonnees <- DESeq(notresetdedonnees)
+```
+
+```{r}
+# formatage des résultats sous forme de DataFrame
+
+resultats <- results(notresetdedonnees)
+```
+
+```{r}
+# exportation des résultats sous forme de MA-plot
+
+plotMA(resultats, ylim = "c(limite inférieure du log fold change à afficher, limite supérieure)")
+```
+
