@@ -19,7 +19,7 @@
 
 - Docker (version X.X.X)
 - Snakemake (version X.X.X)
-- SRA Toolkit (version X.X.X)
+- SRA Toolkit (version 3.0.7)
 - Bowtie (version X.X.X)
 - TrimGalore (version X.X.X)
 - Subread (version X.X.X)
