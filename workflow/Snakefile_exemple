@@ -1,0 +1,37 @@
+# Ce script sert pour que tout le monde dans le groupe comprenne comment fonctionne la base de snakemake
+# Avec un exemple assez simpple. 
+
+SAMPLES = [
+            "SRR10379721",
+            "SRR10379722",
+            "SRR10379723",
+            "SRR10379724",
+            "SRR10379725",
+            "SRR10379726"
+            ]
+
+# -------- Target rules
+# This rule will change after each next step in the project is reached
+rule all:
+    input:
+        "../results/concatenated.txt"
+
+# -------- Part 1: Create text files
+rule make_text_files:
+    output:
+        fastq="../results/accessions/{sample}.txt"
+    shell:
+        """
+        echo "This is a test {wildcards.sample}" > {output}
+        """
+
+# -------- Part 2: Concatenate text files
+rule concatenate_text_files:
+    input:
+        text_files=expand("../results/accessions/{sample}.txt", sample=SAMPLES)
+    output:
+        concatenated="../results/concatenated.txt"
+    shell:
+        """
+        cat {input.text_files} > {output.concatenated}
+        """
