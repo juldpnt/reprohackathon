@@ -1,0 +1,3 @@
+# To avoid adding by error the .snakemake folder to the repository
+workflow/.snakemake/*
+
