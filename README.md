@@ -17,8 +17,33 @@
 
 ## Outils
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vitae nunc eget nunc aliquam aliquet. Donec auctor, nunc sed aliquam ultricies, nunc nunc aliquam nunc, nec al
+- Docker (version X.X.X)
+- Snakemake (version X.X.X)
+- SRA Toolkit (version X.X.X)
+- Bowtie (version X.X.X)
+- TrimGalore (version X.X.X)
+- Subread (version X.X.X)
+- DESeq2 (version X.X.X) + R (version X.X.X)
 
 ## Architecture du projet
-- Dossier_1 contient blabla
-- Dossier_2 contient blabla
+
+```
+Reprohackaton
+├── README.md
+├── config
+├── resources
+│   ├── dockerfiles
+│   │   ├── readme.md
+│   │   ├── bowtie
+│   │   ├── deseq2
+│   │   ├── subread
+│   │   └── trimgalore
+├── results
+│   └── readme.md
+└── workflow
+    ├── Snakefile
+    └── scripts
+```
+Note pour plus tard: réalisé avec `tree > fichier.md`
+Expliquer la structure sous le format
+https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html 
