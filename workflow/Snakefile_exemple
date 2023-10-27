@@ -22,7 +22,7 @@ rule make_text_files:
         fastq="../results/accessions/{sample}.txt"
     shell:
         """
-        echo "This is a test {wildcards.sample}" > {output}
+        echo "This is a test {wildcards.sample}" > {output.fastq}
         """
 
 # -------- Part 2: Concatenate text files

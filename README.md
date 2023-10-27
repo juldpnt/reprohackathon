@@ -7,6 +7,7 @@
   - [Membres du groupe](#membres-du-groupe)
   - [Outils](#outils)
   - [Architecture du projet](#architecture-du-projet)
+  - [Architecture du workflow](#architecture-du-workflow)
 
 ## Membres du groupe
 
@@ -47,3 +48,8 @@ Reprohackaton
 Note pour plus tard: réalisé avec `tree > fichier.md`
 Expliquer la structure sous le format
 https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html 
+
+## Architecture du workflow
+
+Ce workflow est composé de X étapes:
+![Workflow](rulegraph.png)
