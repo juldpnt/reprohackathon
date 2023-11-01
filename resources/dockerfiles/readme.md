@@ -39,4 +39,12 @@ docker pull <nom_utilisateur>/<repo>:<nom_image>
 
 ## Exécution d'un container
 
-...
+```bash
+docker run -v $PWD:$PWD --entrypoint bash -i -t <nom_image>
+```
+
+ou plus simplement si on soouhaite simplement exécuter un script sans fichiers locaux:
+
+```bash
+docker -it <nom_image>
+```
