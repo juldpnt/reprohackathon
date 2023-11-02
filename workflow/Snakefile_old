@@ -1,0 +1,67 @@
+# Here we define the accessions to be used in the analysis
+SAMPLES = [
+            "SRR10379721",
+            "SRR10379722",
+            "SRR10379723",
+            "SRR10379724",
+            "SRR10379725",
+            "SRR10379726"
+            ]
+# TODO: Changer les images par celles baséees sur les Dockerfiles locaux !!!!!
+
+# -------- Target rules
+# This rule will change after each next step in the project is reached
+rule all:
+    input:
+        expand("../results/mapped_reads/{sample}_mapped.bam", sample=SAMPLES)
+
+# -------- Part 1: Download the accession files
+rule get_fastq_files:
+    output:
+        fastq="../results/fastq_files/{sample}.fastq"
+    container: 
+        "docker://ncbi/sra-tools" 
+    shell:
+        """
+        fasterq-dump {wildcards.sample} > {output.fastq}
+        """
+
+rule trimming:
+    input:
+        fastq="../results/fastq_files/{sample}.fastq"
+    output:
+        trimmed="../results/trimmed_reads/{sample}_trimmed.fastq"
+    container:
+        "docker://genomicpariscentre/trimgalore"
+    shell:
+        """
+        trim_galore -q 20 --phred33 --length 25 {input.fastq} > {output.trimmed}
+        """
+
+rule create_index:
+    output:
+        genome_index="../results/genome_index/genome_index.sam" # TODO: Changer le nom du fichier en fonction de ce qui est vraiment obtenu.
+    container:
+        "docker://biocontainers/bowtie"
+    shell:
+        """
+        wget -q -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta" \
+        && wget -O reference.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1 \
+        && bowtie-build reference.fasta reference > {output.genome_index}
+        """
+
+rule mapping:
+    input:
+        trimmed="../results/trimmed_reads/{sample}_trimmed.fastq",
+        genome_index="../results/genome_index/genome_index.sam"
+    output:
+        mapped="../results/mapped_reads/{sample}_mapped.bam"
+    container: 
+        "docker://biocontainers/fastqc"
+    shell:
+        """
+        bowtie -p 1 -S {input.genome_index} {input.trimmed} | \
+        samtools sort -@ 1 {output.mapped} \
+        && samtools index {output.mapped}
+        """
+
