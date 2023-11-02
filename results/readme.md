@@ -1,1 +1,0 @@
-Ce dossier devrait être vide lors de l'initialisation du projet. Il est utilisé pour stocker les fichiers de sortie du workflow.
