@@ -6,18 +6,24 @@ output: html_document
 ```{r setup, include=FALSE}
 library("DESeq2")
 
-# On considère que les données sont déjà formatées avant le traitement par R
-
 # Création d'un objet DESeqDataSet (dds) avec la matrice et les données de colonnes
 
-notresetdedonnees <- DESeqDataSetFromMatrix(countData = notrematrice, colData = nosdonneesdecolonnes, design = ~ echantillons + condition)
+subreadCounts <- as.matrix(read.csv("subreadCountsOutput.???",sep="\t",row.names="gene_id"))
+
+subreadData <- read.csv("subreadDataOutput.???", row.names=1)
+
+subreadData <- subreadData[,c("condition","type")]
+subreadData$condition <- factor(subreadData$condition)
+subreadData$type <- factor(subreadData$type)
+
+dataSet <- DESeqDataSetFromMatrix(countData = subreadCountsOutput, colData = subreadDataOutput, design = ~ condition)
 
 ```
 
 ```{r}
 # analyse d'expression différentielle sur notre dds
 
-notresetdedonnees <- DESeq(notresetdedonnees)
+dataSet <- DESeq(dataSet)
 ```
 
 ```{r}
@@ -28,6 +34,11 @@ resultats <- results(notresetdedonnees)
 
 ```{r}
 # exportation des résultats sous forme de MA-plot
+
+plotMA(resultats, ylim = "c(limite inférieure du log fold change à afficher, limite supérieure)")
+```
+
+
 
 plotMA(resultats, ylim = "c(limite inférieure du log fold change à afficher, limite supérieure)")
 ```
