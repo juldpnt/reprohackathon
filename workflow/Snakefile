@@ -14,9 +14,12 @@ SAMPLES = [
 rule all:
     """
     Target rule, the input is the output of the DAG made by snakemake
+    Comment/Uncomment lines below to change the target rule for debugging purposes
     """
     input:
-        expand("tmp/trimmed_fastq/{sample}_trimmed.fastq", sample=SAMPLES)
+        # expand("tmp/genome_index/genome_index.sam", sample=SAMPLES)
+        # "tmp/reference.fasta", "tmp/reference.gff",
+        expand("tmp/raw_fastq/{sample}.fastq", sample=SAMPLES)
 
 # -------- Part 1: Download the accession files
 rule get_fastq_files:
@@ -32,14 +35,59 @@ rule get_fastq_files:
         """
         fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
         """
+
 rule trimming:
     input:
         fastq="tmp/raw_fastq/{sample}.fastq"
     output:
-        trimmed="tmp/trimmed_fastq/{sample}_trimmed.fastq"
+        fq="tmp/trimmed_fastq/{sample}_trimmed.fq",
     container:
         "docker://vibsinglecellnf/trimgalore:trimgalore-0.6.7-cutadapt-4.2"
     shell:
+    # rendre la sortie du fichier plus propre avec le param -O (erreur avec le snakefile)
         """
-        trim_galore -q 20 --phred33 --length 25 {input.fastq} > {output.trimmed}
+        trim_galore -q 20 --phred33 --length 25 {input.fastq}
+        mv {wildcards.sample}_trimmed.fq tmp/trimmed_fastq/{wildcards.sample}_trimmed.fq
+        mv {wildcards.sample}.fastq_trimming_report.txt tmp/trimmed_fastq/{wildcards.sample}_trimming_report.txt
+        """
+
+rule download_external_files:
+    output:
+        reference="tmp/reference.fasta",
+        annotation="tmp/reference.gff"
+    container:
+        "docker://juldpnt/reprohackaton_8:alpine"
+    shell:
+        """
+        wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
+        mv reference.fasta tmp/reference.fasta
+        wget -O reference.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        mv reference.gff tmp/reference.gff
+        """
+
+rule create_index:
+    input:
+        reference="tmp/reference.fasta"
+    output:
+        genome_index="tmp/genome_index/genome_index.sam" # TODO: Changer le nom du fichier en fonction de ce qui est vraiment obtenu.
+    container:
+        "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
+    shell:
+        """
+        bowtie-build {reference} reference > {output.genome_index}
+        """
+
+rule mapping:
+    input:
+        trimmed="../results/trimmed_reads/{sample}_trimmed.fastq",
+        genome_index="../results/genome_index/genome_index.sam"
+    output:
+        mapped="../results/mapped_reads/{sample}_mapped.bam"
+    container: 
+        "docker://biocontainers/fastqc"
+    shell:
+        """
+        bowtie -p 1 -S {input.genome_index} {input.trimmed} | \
+        samtools sort -@ 1 {output.mapped} \
+        samtools index {output.mapped}
         """
