@@ -2,7 +2,7 @@
 # Un/comment the lines below to change the number of accessions to be downloaded
 SAMPLES = [
             "SRR10379721",
-            # "SRR10379722",
+            "SRR10379722",
             # "SRR10379723",
             # "SRR10379724",
             # "SRR10379725",
@@ -17,10 +17,11 @@ rule all:
     Comment/Uncomment lines below to change the target rule for debugging purposes
     """
     input:
-        # expand("tmp/genome_index/genome_index.sam", sample=SAMPLES)
-        # "tmp/reference.fasta", "tmp/reference.gff",
-        # expand("tmp/raw_fastq/{sample}.fastq", sample=SAMPLES)
-        "tmp/genome_index"
+        # "tmp/reference.fasta", "tmp/reference.gff", 
+        # expand("tmp/raw_fastq/{sample}.fastq", sample=SAMPLES),
+        # "tmp/genome_index", 
+        # expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
+        "tmp/counts.txt"
 
 # -------- Part 1: Download the accession files
 rule get_fastq_files:
@@ -79,17 +80,28 @@ rule create_index:
         bowtie-build {input.reference} {output}/reference
         """
 
-# rule mapping:
-#     input:
-#         trimmed="../results/trimmed_reads/{sample}_trimmed.fastq",
-#         genome_index="../results/genome_index/genome_index.sam"
-#     output:
-#         mapped="../results/mapped_reads/{sample}_mapped.bam"
-#     container: 
-#         "docker://biocontainers/fastqc"
-#     shell:
-#         """
-#         bowtie -p 1 -S {input.genome_index} {input.trimmed} | \
-#         samtools sort -@ 1 {output.mapped} \
-#         samtools index {output.mapped}
-#         """
+rule mapping:
+    input:
+        trimmed="tmp/trimmed_fastq/{sample}_trimmed.fq",
+        genome_index="tmp/genome_index"
+    output:
+        mapped="tmp/mapped_reads/{sample}_mapped.sam"
+    container: 
+        "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
+    shell:
+        """
+        bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
+        """
+
+rule count:
+    input:
+        reference="tmp/reference.gff",
+        mapped_sam_files=expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
+    output:
+        counted="tmp/counts.txt"
+    container:
+        "docker://biocontainers/subread:v1.6.3dfsg-1-deb_cv1"
+    shell:
+        """
+        featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
+        """
