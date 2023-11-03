@@ -52,5 +52,5 @@ https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html
 ## Architecture du workflow
 
 Ce workflow est composé de X étapes:
-![Workflow](ressources/rulegraph.png)
-![Workflow](ressources/jobgraph.png)
+![Workflow](resources/rulegraph.png)
+![Workflow](resources/jobgraph.png)
