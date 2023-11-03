@@ -15,10 +15,13 @@ setDT(subreadCounts)
 
 subreadCounts <- as.matrix(subreadCounts)
 
-subreadCounts <- subreadCounts[,-c(2,3,4,5,6,7)]
+subreadCounts <- subreadCounts[,-c(2,3,4,5,6)]
 
-for (i in subreadCounts[,c(2,3,4,5,6)]){
-  i <- strtoi(i)
+for (i in (1:2967)){
+  for (j in (2:7)){
+    subreadCounts[i,j] <- strtoi(gsub(' ','',subreadCounts[i,j]))
+  }
+ 
 }
   
 
