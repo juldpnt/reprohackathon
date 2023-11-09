@@ -1,12 +1,5 @@
 # Set the base image to alpine
-FROM alpine:3.18.4
-
-# Set the working environnement when calling the docker image
-WORKDIR /home
+FROM mambaorg/micromamba:1.5-alpine
 
 # Install required packages to use DESeq2
-RUN apk add --no-cache \
-    build-base \
-    R=4.3.0-r0 \
-    && Rscript -e  'install.packages("BiocManager", repos = c(CRAN = "https://cran.rstudio.com/"))' \
-    && Rscript -e 'BiocManager::install(c("DESeq2"))'
+RUN micromamba install -y -n base -c bioconda -c conda-forge r-base r-essentials bioconductor-deseq2
