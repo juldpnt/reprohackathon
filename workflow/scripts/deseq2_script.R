@@ -3,7 +3,7 @@
 #BiocManager::install("DESeq2")
 
 # ------------- Preprocess data
-countdata <- read.table("workflow/tmp/counts.txt", header = TRUE, sep = '\t', row.names = 1)
+countdata <- read.table("resources/feature_counts_file/counts.txt", header = TRUE, sep = '\t', row.names = 1)
 new_colnames <- c("SRR10379721",
             "SRR10379722",
             "SRR10379723",
