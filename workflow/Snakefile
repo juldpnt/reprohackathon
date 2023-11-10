@@ -35,7 +35,7 @@ rule get_fastq_files:
         # """
         # Uncomment the lines below to download only 1000 reads per accession and comment the lines above
         """
-        fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
+        fastq-dump --stdout {wildcards.sample} > {output.fastq}
         """
 
 rule trimming:

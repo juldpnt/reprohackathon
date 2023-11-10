@@ -1,5 +1,5 @@
 Status	tmp/mapped_reads/SRR10379721_mapped.sam	tmp/mapped_reads/SRR10379722_mapped.sam	tmp/mapped_reads/SRR10379723_mapped.sam	tmp/mapped_reads/SRR10379724_mapped.sam	tmp/mapped_reads/SRR10379725_mapped.sam	tmp/mapped_reads/SRR10379726_mapped.sam
-Assigned	499	479	474	490	578	236
+Assigned	24966806	20877434	18728207	22609840	26527747	6473815
 Unassigned_Unmapped	0	0	0	0	0	0
 Unassigned_MappingQuality	0	0	0	0	0	0
 Unassigned_Chimera	0	0	0	0	0	0
@@ -8,6 +8,6 @@ Unassigned_Duplicate	0	0	0	0	0	0
 Unassigned_MultiMapping	0	0	0	0	0	0
 Unassigned_Secondary	0	0	0	0	0	0
 Unassigned_Nonjunction	0	0	0	0	0	0
-Unassigned_NoFeatures	128	139	127	172	157	110
+Unassigned_NoFeatures	7091161	5562665	5129223	8501168	8278183	3010237
 Unassigned_Overlapping_Length	0	0	0	0	0	0
-Unassigned_Ambiguity	18	15	17	16	14	12
+Unassigned_Ambiguity	877740	745811	663047	728676	871670	258796
