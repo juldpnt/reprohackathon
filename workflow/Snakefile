@@ -25,6 +25,10 @@ rule all:
 
 # -------- Part 1: Download the accession files
 rule get_fastq_files:
+    """
+    This rule is responsible for downloading the fastq files for each sample. 
+    It uses the sratoolkit container to run the fastq-dump command, which downloads the fastq file for a given sample.
+    """
     output:
         fastq="tmp/raw_fastq/{sample}.fastq"
     container: 
@@ -33,12 +37,15 @@ rule get_fastq_files:
         # """
         # fasterq-dump --threads 4 --progress {wildcards.sample} > {output.fastq}
         # """
-        # Uncomment the lines below to download only 1000 reads per accession and comment the lines above
+        # Uncomment the lines below to download only 1000 reads per accession with the -X 1000 arg and comment the lines above
         """
         fastq-dump --stdout {wildcards.sample} > {output.fastq}
         """
 
 rule trimming:
+    """
+    This rule is responsible for trimming the fastq files for each sample using trim galore container.
+    """
     input:
         fastq="tmp/raw_fastq/{sample}.fastq"
     output:
@@ -46,7 +53,7 @@ rule trimming:
     container:
         "docker://vibsinglecellnf/trimgalore:trimgalore-0.6.7-cutadapt-4.2"
     shell:
-    # rendre la sortie du fichier plus propre avec le param -O (erreur avec le snakefile)
+        # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
         """
         trim_galore -q 20 --phred33 --length 25 {input.fastq}
         mv {wildcards.sample}_trimmed.fq tmp/trimmed_fastq/{wildcards.sample}_trimmed.fq
@@ -54,20 +61,27 @@ rule trimming:
         """
 
 rule download_external_files:
+    """
+    This rule is responsible for downloading the reference genome and annotation files.
+    """
     output:
         reference="tmp/reference.fasta",
         annotation="tmp/reference.gff"
     container:
         "docker://juldpnt/reprohackaton_8:alpine"
     shell:
+        # The files are downloaded using wget and then moved to the tmp folder 
         """
         wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
         mv reference.fasta tmp/reference.fasta
-        wget -O reference.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
-        mv reference.gff tmp/reference.gff
+        wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        mv annots.gff tmp/annots.gff
         """
 
 rule create_index:
+    """
+    This rule is responsible for creating the index for the reference genome using bowtie container.
+    """
     input:
         reference="tmp/reference.fasta"
     output:
@@ -81,6 +95,9 @@ rule create_index:
         """
 
 rule mapping:
+    """
+    This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
+    """
     input:
         trimmed="tmp/trimmed_fastq/{sample}_trimmed.fq",
         genome_index="tmp/genome_index"
@@ -94,8 +111,11 @@ rule mapping:
         """
 
 rule count:
+    """
+    This rule is responsible for counting the reads mapped to each gene using featureCounts container.
+    """
     input:
-        reference="tmp/reference.gff",
+        reference="tmp/annots.gff",
         mapped_sam_files=expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
     output:
         counted="tmp/counts.txt"
