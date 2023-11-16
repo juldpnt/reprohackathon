@@ -23,7 +23,26 @@ rule all:
         # expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
         "tmp/counts.txt"
 
-# -------- Part 1: Download the accession files
+# -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
+rule download_external_files:
+    """
+    This rule is responsible for downloading the reference genome and annotation files.
+    """
+    output:
+        reference="tmp/reference.fasta",
+        annotation="tmp/reference.gff"
+    container:
+        "docker://juldpnt/reprohackaton_8:alpine"
+    shell:
+        # The files are downloaded using wget and then moved to the tmp folder 
+        """
+        wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
+        mv reference.fasta tmp/reference.fasta
+        wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        mv annots.gff tmp/annots.gff
+        """
+
+# --------  APPLY FOLLOWING RULES TO EACH SAMPLE
 rule get_fastq_files:
     """
     This rule is responsible for downloading the fastq files for each sample. 
@@ -60,24 +79,6 @@ rule trimming:
         mv {wildcards.sample}.fastq_trimming_report.txt tmp/trimmed_fastq/{wildcards.sample}_trimming_report.txt
         """
 
-rule download_external_files:
-    """
-    This rule is responsible for downloading the reference genome and annotation files.
-    """
-    output:
-        reference="tmp/reference.fasta",
-        annotation="tmp/reference.gff"
-    container:
-        "docker://juldpnt/reprohackaton_8:alpine"
-    shell:
-        # The files are downloaded using wget and then moved to the tmp folder 
-        """
-        wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
-        mv reference.fasta tmp/reference.fasta
-        wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
-        mv annots.gff tmp/annots.gff
-        """
-
 rule create_index:
     """
     This rule is responsible for creating the index for the reference genome using bowtie container.
@@ -109,7 +110,7 @@ rule mapping:
         """
         bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
         """
-
+# --------  APPLY FOLLOWING RULES ONCE AFTER ALL SAMPLES ARE PROCESSED
 rule count:
     """
     This rule is responsible for counting the reads mapped to each gene using featureCounts container.
