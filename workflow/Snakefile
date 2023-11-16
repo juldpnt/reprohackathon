@@ -126,3 +126,17 @@ rule count:
         """
         featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
         """
+rule scriptR:
+    """
+    This rule is responsible for running the R script that will generate the plots.
+    """
+    input:
+        counts="tmp/counts.txt"
+    output:
+        plot="tmp/plot.png"
+    container:
+        "docker://juldpnt/reprohackaton_8:alpine"
+    shell:
+        """
+        Rscript scripts/plot.R {input.counts} {output.plot}
+        """
