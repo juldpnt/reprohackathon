@@ -2,6 +2,8 @@ configfile: "config.yaml"
 
 # Un/comment the lines below to change the number of accessions to be downloaded
 SAMPLES = config["samples"]
+PLOTS = config["plots"]
+
 TMP = config["tmp"]
 RESULTS = config["results"]
 WORKFLOW = config["workflow"]
@@ -20,7 +22,7 @@ rule all:
         # TMP + "/genome_index", 
         # expand(TMP + "/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
         # TMP + "/counts.txt", 
-        RESULTS + "/MA_plot.png"
+        expand(RESULTS + "/{plot}.png", plot=PLOTS)
 
 # -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
 
@@ -37,7 +39,7 @@ rule download_reference_genome:
         """
         mkdir -p {TMP}
         wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
-        mv reference.fasta {TMP}/reference.fasta
+        mv reference.fasta {output.reference}
         """
 
 rule download_annotation:
@@ -53,7 +55,7 @@ rule download_annotation:
         """
         mkdir -p {TMP}
         wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
-        mv annots.gff {TMP}/annots.gff
+        mv annots.gff {output.annotation}
         """
 # --------  APPLY FOLLOWING RULES TO EACH SAMPLE
 
@@ -83,14 +85,15 @@ rule trimming:
         fastq= TMP + "/raw_fastq/{sample}.fastq"
     output:
         fq= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        report= TMP + "/trimmed_fastq/{sample}_trimming_report.txt"
     container:
         "docker://vibsinglecellnf/trimgalore:trimgalore-0.6.7-cutadapt-4.2"
     shell:
         # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
         """
         trim_galore -q 20 --phred33 --length 25 {input.fastq}
-        mv {wildcards.sample}_trimmed.fq {config[tmp]}/trimmed_fastq/{wildcards.sample}_trimmed.fq
-        mv {wildcards.sample}.fastq_trimming_report.txt {TMP}/trimmed_fastq/{wildcards.sample}_trimming_report.txt
+        mv {wildcards.sample}_trimmed.fq {output.fq}
+        mv {wildcards.sample}.fastq_trimming_report.txt {output.report}
         """
 
 rule create_index:
@@ -149,11 +152,14 @@ rule scriptR:
     input:
         counts= TMP + "/counts.txt"
     output:
-        plot= RESULTS + "/MA_plot.png"
+        expand(RESULTS + "/{plot}.png", plot=PLOTS)
     container:
         "docker://juldpnt/reprohackaton_8:deseq2"
     shell:
+        # This script will generate the final plots and move them to the results folder
+        # All files that ends with plot.png are moved to the results folder
         """
         mkdir -p {RESULTS}
-        Rscript {WORKFLOW}/script/plot.R {input.counts} {output.plot}
+        Rscript {WORKFLOW}/scripts/deseq2_script.R {input.counts}
+        mv *plot.png {RESULTS}
         """

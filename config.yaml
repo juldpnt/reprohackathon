@@ -17,3 +17,9 @@ samples:
   - "SRR10379724"
   - "SRR10379725"
   - "SRR10379726"
+
+# Here you can change the desired plots
+plots:
+ - "MA_plot"
+#  - "PCA_plot"
+#  - "Volcano_plot" 

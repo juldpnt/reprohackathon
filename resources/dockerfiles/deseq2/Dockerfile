@@ -1,13 +1,18 @@
-
 # Use the Ubuntu 22.04 base image
 FROM ubuntu:22.04
 
 ENV DEBIAN_FRONTEND noninteractive
 
+# Add the CRAN repository to get specific R versions
+RUN apt-get update && apt-get install -y \
+    software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys E298A3A825C0D65DFD57CBB651716619E084DAB9
+RUN add-apt-repository "deb https://cloud.r-project.org/bin/linux/ubuntu $(lsb_release -cs)-cran40/"
+
 # Update the package lists and install necessary dependencies
 RUN apt-get update && apt-get install -y \
-    r-base \
-    r-base-dev \
+    r-base=4.3.* \
+    r-base-dev=4.3.* \
     libssl-dev \
     libcurl4-openssl-dev
 
