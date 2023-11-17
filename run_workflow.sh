@@ -1,7 +1,7 @@
 # ----------- Snakemake workflow for running the analysis
 
 # Modify this variable to change the number of cores used by snakemake
-cores=4
+cores=$(grep 'threads:' config.yaml | awk '{print $2}')
 
 # Message to the user
 echo
