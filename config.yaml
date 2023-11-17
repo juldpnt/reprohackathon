@@ -1,0 +1,25 @@
+# Here you can set the paths to the different folders
+tmp: "tmp"
+results: "results"
+workflow: "workflow"
+resources: "resources"
+
+# Here you can set the number of threads to use for snakemake
+threads: 4
+
+# Here you can change the accessions to download
+samples:
+  # The tree experiments
+  - "SRR10379721"
+  - "SRR10379722"
+  - "SRR10379723"
+  # The three controls
+  - "SRR10379724"
+  - "SRR10379725"
+  - "SRR10379726"
+
+# Here you can change the desired plots
+plots:
+ - "MA_plot"
+#  - "PCA_plot"
+#  - "Volcano_plot" 
