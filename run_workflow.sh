@@ -8,7 +8,7 @@ echo
 echo " ----------- Reprohackathon 2023 : groupe 8 -----------"
 echo
 echo "Snakemake AND Apptainer should be installed before running this script"
-echo "The default number of cores is $cores, but can be changed in the script"
+echo "The default number of cores is $cores, but can be changed in the config.yaml file"
 echo
 echo " ------------------------------------------------------"
 echo

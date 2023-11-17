@@ -1,7 +1,7 @@
 # Here you can set the paths to the different folders
 tmp: "tmp"
 results: "results"
-worflow: "workflow"
+workflow: "workflow"
 resources: "resources"
 
 # Here you can set the number of threads to use for snakemake

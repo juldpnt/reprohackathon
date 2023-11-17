@@ -3,6 +3,9 @@ configfile: "config.yaml"
 # Un/comment the lines below to change the number of accessions to be downloaded
 SAMPLES = config["samples"]
 TMP = config["tmp"]
+RESULTS = config["results"]
+WORKFLOW = config["workflow"]
+
 # -------- Target rules
 
 # This rule will change after each next step in the project is reached
@@ -16,7 +19,8 @@ rule all:
         # expand(TMP + "/raw_fastq/{sample}.fastq", sample=SAMPLES),
         # TMP + "/genome_index", 
         # expand(TMP + "/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
-        TMP + "/counts.txt"
+        # TMP + "/counts.txt", 
+        RESULTS + "/MA_plot.png"
 
 # -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
 
@@ -63,13 +67,13 @@ rule get_fastq_files:
     container: 
         "docker://juldpnt/reprohackaton_8:sratoolkit" 
     shell:
-        """
-        fasterq-dump --threads 4 --progress {wildcards.sample} > {output.fastq}
-        """
+        # """
+        # fasterq-dump --threads 4 --progress {wildcards.sample} > {output.fastq}
+        # """
         # Uncomment the lines below to download only 1000 reads per accession with the -X 1000 arg and comment the lines above
-        # """
-        # fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
-        # """
+        """
+        fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
+        """
 
 rule trimming:
     """
@@ -110,7 +114,7 @@ rule mapping:
     This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
     """
     input:
-        trimmed=TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        trimmed= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
         genome_index= TMP + "/genome_index"
     output:
         mapped= TMP + "/mapped_reads/{sample}_mapped.sam"
@@ -127,7 +131,7 @@ rule count:
     This rule is responsible for counting the reads mapped to each gene using featureCounts container.
     """
     input:
-        reference=TMP +"/annots.gff",
+        reference= TMP +"/annots.gff",
         mapped_sam_files=expand(TMP + "/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
     output:
         counted= TMP + "/counts.txt"
@@ -138,17 +142,18 @@ rule count:
         featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
         """
 
-# rule scriptR:
-#     """
-#     This rule is responsible for running the R script that will generate the plots.
-#     """
-#     input:
-#         counts= TMP + "/counts.txt"
-#     output:
-#         plot="results/plot.png"
-#     container:
-#         "docker://juldpnt/reprohackaton_8:alpine"
-#     shell:
-#         """
-#         Rscript scripts/plot.R {input.counts} {output.plot}
-#         """
+rule scriptR:
+    """
+    This rule is responsible for running the R script that will generate the final plots.
+    """
+    input:
+        counts= TMP + "/counts.txt"
+    output:
+        plot= RESULTS + "/MA_plot.png"
+    container:
+        "docker://juldpnt/reprohackaton_8:deseq2"
+    shell:
+        """
+        mkdir -p {RESULTS}
+        Rscript {WORKFLOW}/script/plot.R {input.counts} {output.plot}
+        """
