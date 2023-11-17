@@ -14,4 +14,4 @@ echo " ------------------------------------------------------"
 echo
 
 # Run the workflow
-snakemake workflow/Snakefile --cores $cores -r -p --use-singularity
+snakemake --cores $cores -r -p --use-singularity

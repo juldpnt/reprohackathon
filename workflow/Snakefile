@@ -21,7 +21,7 @@ rule all:
         # expand("tmp/raw_fastq/{sample}.fastq", sample=SAMPLES),
         # "tmp/genome_index", 
         # expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
-        "tmp/counts.txt"
+        "workflow/tmp/counts.txt"
 
 # -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
 rule download_external_files:
@@ -29,17 +29,17 @@ rule download_external_files:
     This rule is responsible for downloading the reference genome and annotation files.
     """
     output:
-        reference="tmp/reference.fasta",
-        annotation="tmp/reference.gff"
+        reference="workflow/tmp/reference.fasta",
+        annotation="workflow/tmp/reference.gff"
     container:
         "docker://juldpnt/reprohackaton_8:alpine"
     shell:
         # The files are downloaded using wget and then moved to the tmp folder 
         """
         wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
-        mv reference.fasta tmp/reference.fasta
+        mv reference.fasta workflow/tmp/reference.fasta
         wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
-        mv annots.gff tmp/annots.gff
+        mv annots.gff workflow/tmp/annots.gff
         """
 
 # --------  APPLY FOLLOWING RULES TO EACH SAMPLE
@@ -49,7 +49,7 @@ rule get_fastq_files:
     It uses the sratoolkit container to run the fastq-dump command, which downloads the fastq file for a given sample.
     """
     output:
-        fastq="tmp/raw_fastq/{sample}.fastq"
+        fastq="workflow/tmp/raw_fastq/{sample}.fastq"
     container: 
         "docker://juldpnt/reprohackaton_8:sratoolkit" 
     shell:
@@ -66,17 +66,17 @@ rule trimming:
     This rule is responsible for trimming the fastq files for each sample using trim galore container.
     """
     input:
-        fastq="tmp/raw_fastq/{sample}.fastq"
+        fastq="workflow/tmp/raw_fastq/{sample}.fastq"
     output:
-        fq="tmp/trimmed_fastq/{sample}_trimmed.fq",
+        fq="workflow/tmp/trimmed_fastq/{sample}_trimmed.fq",
     container:
         "docker://vibsinglecellnf/trimgalore:trimgalore-0.6.7-cutadapt-4.2"
     shell:
         # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
         """
         trim_galore -q 20 --phred33 --length 25 {input.fastq}
-        mv {wildcards.sample}_trimmed.fq tmp/trimmed_fastq/{wildcards.sample}_trimmed.fq
-        mv {wildcards.sample}.fastq_trimming_report.txt tmp/trimmed_fastq/{wildcards.sample}_trimming_report.txt
+        mv {wildcards.sample}_trimmed.fq workflow/tmp/trimmed_fastq/{wildcards.sample}_trimmed.fq
+        mv {wildcards.sample}.fastq_trimming_report.txt workflow/tmp/trimmed_fastq/{wildcards.sample}_trimming_report.txt
         """
 
 rule create_index:
@@ -84,9 +84,9 @@ rule create_index:
     This rule is responsible for creating the index for the reference genome using bowtie container.
     """
     input:
-        reference="tmp/reference.fasta"
+        reference="workflow/tmp/reference.fasta"
     output:
-        directory("tmp/genome_index")
+        directory("workflow/tmp/genome_index")
     container:
         "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
     shell:
@@ -100,10 +100,10 @@ rule mapping:
     This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
     """
     input:
-        trimmed="tmp/trimmed_fastq/{sample}_trimmed.fq",
-        genome_index="tmp/genome_index"
+        trimmed="workflow/tmp/trimmed_fastq/{sample}_trimmed.fq",
+        genome_index="workflow/tmp/genome_index"
     output:
-        mapped="tmp/mapped_reads/{sample}_mapped.sam"
+        mapped="workflow/tmp/mapped_reads/{sample}_mapped.sam"
     container: 
         "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
     shell:
@@ -116,27 +116,28 @@ rule count:
     This rule is responsible for counting the reads mapped to each gene using featureCounts container.
     """
     input:
-        reference="tmp/annots.gff",
-        mapped_sam_files=expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
+        reference="workflow/tmp/annots.gff",
+        mapped_sam_files=expand("workflow/tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
     output:
-        counted="tmp/counts.txt"
+        counted="workflow/tmp/counts.txt"
     container:
         "docker://biocontainers/subread:v1.6.3dfsg-1-deb_cv1"
     shell:
         """
         featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
         """
-rule scriptR:
-    """
-    This rule is responsible for running the R script that will generate the plots.
-    """
-    input:
-        counts="tmp/counts.txt"
-    output:
-        plot="tmp/plot.png"
-    container:
-        "docker://juldpnt/reprohackaton_8:alpine"
-    shell:
-        """
-        Rscript scripts/plot.R {input.counts} {output.plot}
-        """
+
+# rule scriptR:
+#     """
+#     This rule is responsible for running the R script that will generate the plots.
+#     """
+#     input:
+#         counts="workflow/tmp/counts.txt"
+#     output:
+#         plot="results/plot.png"
+#     container:
+#         "docker://juldpnt/reprohackaton_8:alpine"
+#     shell:
+#         """
+#         Rscript scripts/plot.R {input.counts} {output.plot}
+#         """
