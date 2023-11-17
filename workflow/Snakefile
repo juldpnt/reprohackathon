@@ -10,6 +10,7 @@ SAMPLES = [
             ]
 
 # -------- Target rules
+
 # This rule will change after each next step in the project is reached
 rule all:
     """
@@ -17,32 +18,47 @@ rule all:
     Comment/Uncomment lines below to change the target rule for debugging purposes
     """
     input:
-        # "tmp/reference.fasta", "tmp/reference.gff", 
-        # expand("tmp/raw_fastq/{sample}.fastq", sample=SAMPLES),
-        # "tmp/genome_index", 
-        # expand("tmp/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
+        # "workflow/tmp/reference.fasta", "workflow/tmp/annots.gff", 
+        # expand("workflow/tmp//raw_fastq/{sample}.fastq", sample=SAMPLES),
+        # "workflow/tmp//genome_index", 
+        # expand("workflow/tmp//mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
         "workflow/tmp/counts.txt"
 
 # -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
-rule download_external_files:
+
+rule download_reference_genome:
     """
-    This rule is responsible for downloading the reference genome and annotation files.
+    This rule is responsible for downloading the reference genome.
     """
     output:
         reference="workflow/tmp/reference.fasta",
-        annotation="workflow/tmp/reference.gff"
     container:
         "docker://juldpnt/reprohackaton_8:alpine"
     shell:
         # The files are downloaded using wget and then moved to the tmp folder 
         """
+        mkdir -p workflow/tmp
         wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
         mv reference.fasta workflow/tmp/reference.fasta
+        """
+
+rule download_annotation:
+    """
+    This rule is responsible for downloading the annotation file.
+    """
+    output:
+        annotation="workflow/tmp/annots.gff"
+    container:
+        "docker://juldpnt/reprohackaton_8:alpine"
+    shell:
+        # The file is downloaded using wget and then moved to the tmp folder 
+        """
+        mkdir -p workflow/tmp
         wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
         mv annots.gff workflow/tmp/annots.gff
         """
-
 # --------  APPLY FOLLOWING RULES TO EACH SAMPLE
+
 rule get_fastq_files:
     """
     This rule is responsible for downloading the fastq files for each sample. 
@@ -53,13 +69,13 @@ rule get_fastq_files:
     container: 
         "docker://juldpnt/reprohackaton_8:sratoolkit" 
     shell:
-        # """
-        # fasterq-dump --threads 4 --progress {wildcards.sample} > {output.fastq}
-        # """
+        """
+        fasterq-dump --threads 4 --progress {wildcards.sample} > {output.fastq}
+        """
         # Uncomment the lines below to download only 1000 reads per accession with the -X 1000 arg and comment the lines above
-        """
-        fastq-dump --stdout {wildcards.sample} > {output.fastq}
-        """
+        # """
+        # fastq-dump --stdout {wildcards.sample} > {output.fastq}
+        # """
 
 rule trimming:
     """
@@ -110,6 +126,7 @@ rule mapping:
         """
         bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
         """
+
 # --------  APPLY FOLLOWING RULES ONCE AFTER ALL SAMPLES ARE PROCESSED
 rule count:
     """
