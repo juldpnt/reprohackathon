@@ -57,10 +57,21 @@ resultats$padj <- p.adjust(resultats$pvalue, method = "BH")
 de_genes <- subset(resultats, padj < 0.05)
 
 # exportation des résultats sous forme de MA-plot
+# Open a PNG file
+png("MA_plot.png")
 
 plotMA(resultats, ylim = c(-6,6))
+
+# Close the PNG file
+dev.off()
+
+png("PCA_plot.png")
+
 plotPCA(rld, intgroup="condition")
 
-library("EnhancedVolcano")
+dev.off()
 
+library("EnhancedVolcano")
+png("Volcano_plot.png")
 EnhancedVolcano(resultats,lab = rownames(resultats), x = 'log2FoldChange', y = 'pvalue')
+dev.off()
