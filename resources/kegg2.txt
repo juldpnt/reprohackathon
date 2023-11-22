@@ -1,0 +1,170 @@
+SAOUHSC_01493 rpsA; 30S ribosomal protein S1
+SAOUHSC_02506 rpsC; 30S ribosomal protein S3
+SAOUHSC_01829 rpsD; 30S ribosomal protein S4
+SAOUHSC_02494 rpsE; 30S ribosomal protein S5
+SAOUHSC_00348 rpsF; 30S ribosomal protein S6
+SAOUHSC_00528 30S ribosomal protein S7
+SAOUHSC_02498 rpsH; 30S ribosomal protein S8
+SAOUHSC_02477 rpsI; 30S ribosomal protein S9
+SAOUHSC_02512a 30S ribosomal protein S10
+SAOUHSC_02486 30S ribosomal protein S11
+SAOUHSC_00527 rpsL; 30S ribosomal protein S12
+SAOUHSC_02487 rpsM; 30S ribosomal protein S13
+SAOUHSC_01329 rpsN; 30S ribosomal protein S14
+SAOUHSC_02499 rpsN; 30S ribosomal protein S14
+SAOUHSC_01250 rpsO; 30S ribosomal protein S15
+SAOUHSC_01208 rpsP; 30S ribosomal protein S16
+SAOUHSC_02503 rpsQ; 30S ribosomal protein S17
+SAOUHSC_00350 rpsR; 30S ribosomal protein S18
+SAOUHSC_02508 rpsS; 30S ribosomal protein S19
+SAOUHSC_01689 rpsT; 30S ribosomal protein S20
+SAOUHSC_01678 rpsU; 30S ribosomal protein S21
+SAOUHSC_00519 rplA; 50S ribosomal protein L1
+SAOUHSC_02509 rplB; 50S ribosomal protein L2
+SAOUHSC_02512 rplC; 50S ribosomal protein L3
+SAOUHSC_02511 rplD; 50S ribosomal protein L4
+SAOUHSC_02500 rplE; 50S ribosomal protein L5
+SAOUHSC_02496 rplF; 50S ribosomal protein L6
+SAOUHSC_00521 rplL; 50S ribosomal protein L7/L12
+SAOUHSC_00017 rplI; 50S ribosomal protein L9
+SAOUHSC_00520 rplJ; 50S ribosomal protein L10
+SAOUHSC_00518 rplK; 50S ribosomal protein L11
+SAOUHSC_02478 rplM; 50S ribosomal protein L13
+SAOUHSC_02502 rplN; 50S ribosomal protein L14
+SAOUHSC_02492 rplO; 50S ribosomal protein L15
+SAOUHSC_02505 rplP; 50S ribosomal protein L16
+SAOUHSC_02484 rplQ; 50S ribosomal protein L17
+SAOUHSC_02495 rplR; 50S ribosomal protein L18
+SAOUHSC_01211 rplS; 50S ribosomal protein L19
+SAOUHSC_01784 rplT; 50S ribosomal protein L20
+SAOUHSC_01757 rplU; 50S ribosomal protein L21
+SAOUHSC_02507 rplV; 50S ribosomal protein L22
+SAOUHSC_02510 rplW; 50S ribosomal protein L23
+SAOUHSC_02501 rplX; 50S ribosomal protein L24
+SAOUHSC_00474 50S ribosomal protein L25/general stress protein Ctc
+SAOUHSC_01755 rpmA; 50S ribosomal protein L27
+SAOUHSC_01191 rpmB; 50S ribosomal protein L28
+SAOUHSC_02504 50S ribosomal protein L29
+SAOUHSC_02493 rpmD; 50S ribosomal protein L30
+SAOUHSC_02361 rpmE2; 50S ribosomal protein L31 type B
+SAOUHSC_01651 rpmG; 50S ribosomal protein L33
+SAOUHSC_01328 rpmG; 50S ribosomal protein L33
+SAOUHSC_03055 rpmH; 50S ribosomal protein L34
+SAOUHSC_01785 rpmI; 50S ribosomal protein L35
+SAOUHSC_02488 rpmJ; 50S ribosomal protein L36
+SAOUHSC_00526 50S ribosomal protein L7Ae-like protein
+SAOUHSC_R0004 16S Ribosomal RNA
+SAOUHSC_R0002 16S Ribosomal RNA
+SAOUHSC_R0003 16S Ribosomal RNA
+SAOUHSC_R0005 16S Ribosomal RNA
+SAOUHSC_R0001 16S Ribosomal RNA
+SAOUHSC_R00010 23S Ribosomal RNA
+SAOUHSC_R0009 23S Ribosomal RNA
+SAOUHSC_R0007 23S Ribosomal RNA
+SAOUHSC_R0006 23S Ribosomal RNA
+SAOUHSC_R0008 23S Ribosomal RNA
+SAOUHSC_R00012 5S Ribosomal RNA
+SAOUHSC_R00016 5S Ribosomal RNA
+SAOUHSC_R00015 5S Ribosomal RNA
+SAOUHSC_R00013 5S Ribosomal RNA
+SAOUHSC_R00014 5S Ribosomal RNA
+SAOUHSC_R00011 5S Ribosomal RNA
+SAOUHSC_T0001 tRNA-Ala
+SAOUHSC_T0003 tRNA-Ala
+SAOUHSC_T0002 tRNA-Ala
+SAOUHSC_T0006 tRNA-Arg
+SAOUHSC_T0005 tRNA-Arg
+SAOUHSC_T0004 tRNA-Arg
+SAOUHSC_T0007 tRNA-Arg
+SAOUHSC_T00010 tRNA-Asn
+SAOUHSC_T0009 tRNA-Asn
+SAOUHSC_T0008 tRNA-Asn
+SAOUHSC_T00012 tRNA-Asp
+SAOUHSC_T00014 tRNA-Asp
+SAOUHSC_T00013 tRNA-Asp
+SAOUHSC_T00011 tRNA-Asp
+SAOUHSC_T00015 tRNA-Cys
+SAOUHSC_T00017 tRNA-Gln
+SAOUHSC_T00016 tRNA-Gln
+SAOUHSC_T00018 tRNA-Glu
+SAOUHSC_T00019 tRNA-Glu
+SAOUHSC_T00020 tRNA-Glu
+SAOUHSC_T00021 tRNA-Gly
+SAOUHSC_T00024 tRNA-Gly
+SAOUHSC_T00046 pseudogene
+SAOUHSC_T00023 tRNA-Gly
+SAOUHSC_T00047 pseudogene
+SAOUHSC_T00022 tRNA-Gly
+SAOUHSC_T00025 tRNA-Gly
+SAOUHSC_T00026 tRNA-His
+SAOUHSC_T00027 tRNA-His
+SAOUHSC_T00028 tRNA-Ile
+SAOUHSC_T00029 tRNA-Ile
+SAOUHSC_T00031 tRNA-Leu
+SAOUHSC_T00032 tRNA-Leu
+SAOUHSC_T00030 tRNA-Leu
+SAOUHSC_T00033 tRNA-Leu
+SAOUHSC_T00034 tRNA-Leu
+SAOUHSC_T00036 tRNA-Lys
+SAOUHSC_T00037 tRNA-Lys
+SAOUHSC_T00035 tRNA-Lys
+SAOUHSC_T00041 tRNA-Met
+SAOUHSC_T00038 tRNA-Met
+SAOUHSC_T00039 tRNA-Met
+SAOUHSC_T00040 tRNA-Met
+SAOUHSC_T00042 tRNA-Phe
+SAOUHSC_T00043 tRNA-Phe
+SAOUHSC_T00044 tRNA-Pro
+SAOUHSC_T00045 tRNA-Pro
+SAOUHSC_T00048 tRNA-Ser
+SAOUHSC_T00052 tRNA-Ser
+SAOUHSC_T00051 tRNA-Ser
+SAOUHSC_T00049 tRNA-Ser
+SAOUHSC_T00050 tRNA-Ser
+SAOUHSC_T00053 tRNA-Thr
+SAOUHSC_T00054 tRNA-Thr
+SAOUHSC_T00055 tRNA-Thr
+SAOUHSC_T00056 tRNA-Trp
+SAOUHSC_T00058 tRNA-Tyr
+SAOUHSC_T00057 tRNA-Tyr
+SAOUHSC_T00059 tRNA-Val
+SAOUHSC_T00061 tRNA-Val
+SAOUHSC_T00060 tRNA-Val
+SAOUHSC_00509 gltX; glutamyl-tRNA synthetase
+SAOUHSC_02117 gatA; aspartyl/glutamyl-tRNA amidotransferase subunit A
+SAOUHSC_02116 gatB; aspartyl/glutamyl-tRNA amidotransferase subunit B
+SAOUHSC_02118 gatC; aspartyl/glutamyl-tRNA amidotransferase subunit C
+SAOUHSC_01722 alaS; alanyl-tRNA synthetase
+SAOUHSC_01737 aspS; aspartyl-tRNA synthetase
+SAOUHSC_01471 asnC; asparaginyl-tRNA synthetase
+SAOUHSC_01666 glycyl-tRNA synthetase
+SAOUHSC_01788 thrS; threonyl-tRNA synthetase
+SAOUHSC_00009 seryl-tRNA synthetase
+SAOUHSC_00511 cysS; cysteinyl-tRNA synthetase
+SAOUHSC_00461 methionyl-tRNA synthetase
+SAOUHSC_01183 methionyl-tRNA formyltransferase
+SAOUHSC_01767 valS; valyl-tRNA synthetase
+SAOUHSC_01875 leuS; leucyl-tRNA synthetase
+SAOUHSC_01159 ileS; isoleucyl-tRNA synthetase
+SAOUHSC_00493 lysS; lysyl-tRNA synthetase
+SAOUHSC_00611 argS; arginyl-tRNA synthetase
+SAOUHSC_01240 prolyl-tRNA synthetase
+SAOUHSC_01738 hisS; histidyl-tRNA synthetase
+SAOUHSC_01092 pheS; phenylalanyl-tRNA synthetase subunit alpha
+SAOUHSC_01093 pheT; phenylalanyl-tRNA synthetase subunit beta
+SAOUHSC_01839 tyrosyl-tRNA synthetase
+SAOUHSC_00933 tryptophanyl-tRNA synthetase
+SAOUHSC_01246 infB; translation initiation factor IF-2
+SAOUHSC_01786 infC; translation initiation factor IF-3
+SAOUHSC_02274 ABC transporter ATP-binding protein
+SAOUHSC_01234 tsf; elongation factor Ts
+SAOUHSC_00530 tuf; elongation factor Tu
+SAOUHSC_00529 fusA; elongation factor G
+SAOUHSC_02359 prfA; peptide chain release factor 1
+SAOUHSC_01236 frr; ribosome recycling factor
+SAOUHSC_02358 HemK family modification methylase
+SAOUHSC_00475 pth; peptidyl-tRNA hydrolase
+SAOUHSC_02489 infA; translation initiation factor IF-1
+SAOUHSC_01625 elongation factor P
+SAOUHSC_00771 peptide chain release factor 2
+SAOUHSC_00956 prfC; peptide chain release factor 3
