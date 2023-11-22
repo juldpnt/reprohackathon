@@ -1,5 +1,16 @@
-# We can install Bowtie through conda. We use the light version micromamba for this.
-FROM mambaorg/micromamba:1.5.0-alpine
+FROM ubuntu:22.04
 
-# Install Bowtie through Bioconda channel
-RUN micromamba install -y -n base -c bioconda bowtie
+# We specify the version of Bowtie we want to install
+# Paper version is 0.12.7, latest version is 1.3.1
+ARG VERSION=1.3.1
+
+RUN apt update && \
+    apt install -y wget unzip && \
+    # Then we download Bowtie
+    wget https://sourceforge.net/projects/bowtie-bio/files/bowtie/${VERSION}/bowtie-${VERSION}-linux-x86_64.zip && \
+    unzip bowtie-${VERSION}-linux-x86_64.zip && \
+    # Then we remove the zip file to make the image lighter
+    rm -f bowtie-${VERSION}-linux-x86_64.zip
+
+# We add Bowtie to the PATH
+ENV PATH="$PATH:/bowtie-${VERSION}"
