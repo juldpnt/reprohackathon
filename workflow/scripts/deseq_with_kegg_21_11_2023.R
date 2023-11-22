@@ -1,4 +1,3 @@
-setwd("C:/Users/User/Documents/HACKATHON/scripts")
 
 # Importing the count matrix
 subreadCounts <- read.table("/counts.txt", header = TRUE, sep = '\t', row.names = 1)
