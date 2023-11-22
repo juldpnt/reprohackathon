@@ -9,8 +9,8 @@ RUN apk add --no-cache \
         build-base \
         wget \
         zlib-dev \
+    && cd /home/ \
     # Then we download subread, extract it and compile it from sources
-    && cd /home \
     && wget -q https://downloads.sourceforge.net/project/subread/subread-${VERSION}/subread-${VERSION}-source.tar.gz \
     && tar -xzf subread-${VERSION}-source.tar.gz \
     && cd subread-${VERSION}-source/src \
@@ -18,8 +18,8 @@ RUN apk add --no-cache \
     #
     # Then move the binaries to the /usr/local/bin/ folder to make them available for our usage
     # Actually we could have used ENV PATH but it's also to learn this alternative
-    && cd ../bin \
-    && mv utilities/* /usr/local/bin/ \
+    && cd ../ \
+    && mv bin/* /usr/local/bin/ \
     #
     # Then remove the source files and the build dependencies to make the image lighter
     && rm -rf /home/* \

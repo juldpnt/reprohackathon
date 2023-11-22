@@ -13,4 +13,4 @@ RUN apt update && \
     rm -f bowtie-${VERSION}-linux-x86_64.zip
 
 # We add Bowtie to the PATH
-ENV PATH="$PATH:/bowtie-${VERSION}"
+ENV PATH="$PATH:/bowtie-${VERSION}-linux-x86_64/"
