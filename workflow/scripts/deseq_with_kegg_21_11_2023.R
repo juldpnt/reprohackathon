@@ -1,7 +1,7 @@
 setwd("C:/Users/User/Documents/HACKATHON/scripts")
 
 # Importing the count matrix
-subreadCounts <- read.table("counts_nous.txt", header = TRUE, sep = '\t', row.names = 1)
+subreadCounts <- read.table("/counts.txt", header = TRUE, sep = '\t', row.names = 1)
 
 # Setting new column names
 new_colnames <- c("SRR10379721",
@@ -26,7 +26,7 @@ subreadCounts <- as.matrix(subreadCounts)
 # Importing the genes of interest and preparing the table for merging
 rownames(subreadCounts) <- sub("gene-","",rownames(subreadCounts))
 
-kegg <- read.table("kegg2.txt", header = FALSE, sep = "",fill=TRUE)
+kegg <- read.table("/ressources/kegg.txt", header = FALSE, sep = "",fill=TRUE)
 
 kegg <- kegg[,1]
 
