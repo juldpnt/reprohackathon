@@ -1,8 +1,9 @@
-
 setwd("C:/Users/User/Documents/HACKATHON/scripts")
 
-# ------------- Preprocess data
+# Importing the count matrix
 subreadCounts <- read.table("counts_nous.txt", header = TRUE, sep = '\t', row.names = 1)
+
+# Setting new column names
 new_colnames <- c("SRR10379721",
                   "SRR10379722",
                   "SRR10379723",
@@ -10,57 +11,62 @@ new_colnames <- c("SRR10379721",
                   "SRR10379725",
                   "SRR10379726")
 
-# Change column names by accession number
+# Applying the new column names
 colnames(subreadCounts)[(ncol(subreadCounts)-5):ncol(subreadCounts)] <- new_colnames
 
-# Remove first 6 columns (chr, start, end, strand, length, name)
+# Removing the first 6 columns (chr, start, end, strand, length, name) which are irrelevant to our work
 subreadCounts <- subreadCounts[,7:ncol(subreadCounts)]
 
-# Convert to matrix
+# Converting the table to a matrix
 subreadCounts <- as.matrix(subreadCounts)
 
-# Set up the condition vector
+# Setting up the column data conditions
 (condition <- factor(c(rep("exp", 3), rep("temoin", 3))))
 
-kegg <- read.table("kegg.txt", header = FALSE, sep = "\t")
+# Importing the genes of interest and preparing the table for merging
+rownames(subreadCounts) <- sub("gene-","",rownames(subreadCounts))
 
-kegg <- kegg[,2]
+kegg <- read.table("kegg2.txt", header = FALSE, sep = "",fill=TRUE)
 
-kegg <- sub("sao:", "gene-", kegg)
+kegg <- kegg[,1]
 
-subreadCounts <- subreadCounts[c(kegg),]
+kegg <- kegg[grepl("SAOUHSC",kegg)]
 
-# ------------- Construct DESeq object
+# Selecting the genes of interest in the count matrix
+subreadCounts <- subreadCounts[c(grepl(paste(kegg,collapse="|"), rownames(subreadCounts))),]
 
+# The library for a streamlined RNA-seq data analysis
 library(DESeq2)
 
+# "Creating" the column data from the count matrix and the conditions
 (subreadData <- data.frame(row.names=colnames(subreadCounts), condition))
+
+# Creating the dataset from the count matrix and the column data
 dataSet <- DESeqDataSetFromMatrix(countData = subreadCounts, colData = subreadData, design = ~ condition)
 
-
-
-
-
-
-# analyse d'expression différentielle sur notre dds
-
+# Analysing differential expression inside the dataset
 dataSet <- DESeq(dataSet)
 
-# formatage des résultats sous forme de DataFrame
-
+# Formatting the results as a dataframe
 resultats <- results(dataSet)
+resultatslog <- resultats
+resultatslog$baseMean <- log2(resultatslog$baseMean)
 
+# Transforming the count data to reduce variance in small values and "highlight" outliers
 rld <- rlogTransformation(dataSet)
 
-resultats$padj <- p.adjust(resultats$pvalue, method = "BH")
+#resultats$padj <- p.adjust(resultats$pvalue, method = "BH")
 
-de_genes <- subset(resultats, padj < 0.05)
+#de_genes <- subset(resultats, padj < 0.05)
 
-# exportation des résultats sous forme de MA-plot
+# List of genes we want to have labeled on the MA-plot
+nameofinterestlist <- list(list("SAOUHSC_01246", "infB"), list("SAOUHSC_01786", "infC"), list("SAOUHSC_01234", "tsf"), list("SAOUHSC_01236", "frr"), list("SAOUHSC_00475", "pth"), list("SAOUHSC_02489", "infA"))
+
+# Plotting log-fold change on a MA-plot
 # Open a PNG file
 png("MA_plot.png")
 
-plotMA(resultats, ylim = c(-6,6))
+plotMA(resultatslog, xlab = "log2 base mean of normalized counts", ylim = c(-6,6), colsig = "red")
 
 # Close the PNG file
 dev.off()
