@@ -26,7 +26,7 @@ subreadCounts <- as.matrix(subreadCounts)
 # Importing the genes of interest and preparing the table for merging
 rownames(subreadCounts) <- sub("gene-","",rownames(subreadCounts))
 
-kegg <- read.table("/ressources/kegg.txt", header = FALSE, sep = "",fill=TRUE)
+kegg <- read.table("/resources/kegg.txt", header = FALSE, sep = "",fill=TRUE)
 
 kegg <- kegg[,1]
 
