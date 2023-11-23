@@ -65,7 +65,7 @@ nameofinterestlist <- list(list("SAOUHSC_01246", "infB"), list("SAOUHSC_01786", 
 # Open a PNG file
 png("MA_plot.png")
 
-plotMA(resultatslog, xlab = "log2 base mean of normalized counts", ylim = c(-6,6), colsig = "red")
+plotMA(resultatslog, xlab = "log2 base mean of normalized counts", ylim = c(-5.5,5.5), colSig = "red")
 
 # Close the PNG file
 dev.off()
