@@ -1,13 +1,26 @@
 configfile: "config.yaml"
 
-# Un/comment the lines below to change the number of accessions to be downloaded
+# -------- Global variables
+
+# Define the input and outputs
+
 SAMPLES = config["samples"]
 PLOTS = config["plots"]
+
+# Define the folders
 
 TMP = config["tmp"]
 RESULTS = config["results"]
 WORKFLOW = config["workflow"]
 THREADS = config["threads"]
+
+# Define the container images
+BASE = config["containers"]["base"]
+SRATOOLKIT = config["containers"]["sratoolkit"]
+TRIMGALORE = config["containers"]["trimgalore"]
+BOWTIE = config["containers"]["bowtie"]
+SUBREAD = config["containers"]["subread"]
+RSCRIPT = config["containers"]["Rscript"]
 
 # -------- Target rules
 
@@ -34,7 +47,7 @@ rule download_reference_genome:
     output:
         reference= TMP + "/reference.fasta",
     container:
-        "docker://juldpnt/reprohackaton_8:alpine"
+        BASE
     shell:
         # The files are downloaded using wget and then moved to the tmp folder 
         """
@@ -50,7 +63,7 @@ rule download_annotation:
     output:
         annotation= TMP + "/annots.gff"
     container:
-        "docker://juldpnt/reprohackaton_8:alpine"
+        BASE
     shell:
         # The file is downloaded using wget and then moved to the tmp folder 
         """
@@ -68,16 +81,18 @@ rule get_fastq_files:
     output:
         fastq= TMP + "/raw_fastq/{sample}.fastq"
     container: 
-        "docker://juldpnt/reprohackaton_8:sratoolkit" 
+        SRATOOLKIT
     shell:
-        # """
-        # fasterq-dump --threads {THREADS} --progress {wildcards.sample} > {output.fastq}
-        # """
+        """
+        mkdir -p {TMP}/raw_fastq
+        fasterq-dump --threads {THREADS} --progress {wildcards.sample}
+        mv {wildcards.sample}.fastq {output.fastq}
+        """
         # Uncomment the lines below to download only 1000 reads per accession with the -X 1000 arg and comment the lines above
         # If you want to download all reads just remove the -X 1000 arg
-        """
-        fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
-        """
+        # """
+        # fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
+        # """
 
 rule trimming:
     """
@@ -89,7 +104,7 @@ rule trimming:
         fq= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
         report= TMP + "/trimmed_fastq/{sample}_trimming_report.txt"
     container:
-        "docker://mattverlynde/trimgalore:trimgalore-0.6.10-cutadapt-4.2-fastqc-0.11.7"
+        TRIMGALORE
     shell:
         # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
         """
@@ -107,7 +122,7 @@ rule create_index:
     output:
         directory(TMP + "/genome_index")
     container:
-        "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
+        BOWTIE
     shell:
         """
         mkdir -p {output}
@@ -124,7 +139,7 @@ rule mapping:
     output:
         mapped= TMP + "/mapped_reads/{sample}_mapped.sam"
     container: 
-        "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
+        BOWTIE
     shell:
         """
         bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
@@ -141,7 +156,7 @@ rule count:
     output:
         counted= TMP + "/counts.txt"
     container:
-        "docker://biocontainers/subread:v1.6.3dfsg-1-deb_cv1"
+        SUBREAD
     shell:
         """
         featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
@@ -156,7 +171,7 @@ rule scriptR:
     output:
         expand(RESULTS + "/{plot}.png", plot=PLOTS)
     container:
-        "docker://juldpnt/reprohackaton_8:deseq2"
+        RSCRIPT
     shell:
         # This script will generate the final plots and move them to the results folder
         # All files that ends with plot.png are moved to the results folder

@@ -1,8 +1,11 @@
 # To avoid adding by error the .snakemake folder to the repository
-workflow/.snakemake/*
+.snakemake
 
 # Ignore the .ncbi folder
-*/.ncbi/*
+.ncbi
 
 # Ignore all tmp files
 *tmp*
+
+# Ignore .wget-hsts file
+.wget-hsts
