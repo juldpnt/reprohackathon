@@ -5,7 +5,9 @@ FROM ubuntu:22.04
 ARG VERSION=1.2.2
 
 RUN apt update && \
-    apt install -y wget unzip && \
+    apt install -y wget unzip python3
+    
+RUN ln -s /usr/bin/python3 /usr/bin/python && \
     # Then we download Bowtie
     wget https://sourceforge.net/projects/bowtie-bio/files/bowtie/${VERSION}/bowtie-${VERSION}-linux-x86_64.zip && \
     unzip bowtie-${VERSION}-linux-x86_64.zip && \
