@@ -1,6 +1,6 @@
 
 # Importing the count matrix
-subreadCounts <- read.table("/counts.txt", header = TRUE, sep = '\t', row.names = 1)
+subreadCounts <- read.table("/resources/feature_counts_file/counts.txt", header = TRUE, sep = '\t', row.names = 1)
 
 # Setting new column names
 new_colnames <- c("SRR10379721",
