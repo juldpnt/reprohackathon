@@ -2,6 +2,9 @@ configfile: "config.yaml"
 
 # -------- Global variables
 
+# Define the version of the workflow
+VERSION = config["version"]
+
 # Define the input and outputs
 
 SAMPLES = config["samples"]

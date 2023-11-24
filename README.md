@@ -18,13 +18,16 @@
 
 ## Outils
 
-- Docker (version X.X.X)
-- Snakemake (version X.X.X)
-- SRA Toolkit (version 3.0.7)
-- Bowtie (version X.X.X)
-- TrimGalore (version X.X.X)
-- Subread (version X.X.X)
-- DESeq2 (version X.X.X) + R (version X.X.X)
+- Docker        (version  )
+- Snakemake     (version  )
+- Apptainer     (version  )
+- SRA Toolkit   (version 3.0.7)
+- Bowtie        (latest version 1.2.2 | paper version 0.12.7)
+- TrimGalore    (latest version 0.6.10 | paper version unknown)
+- Cutadapt      (latest version ..... | paper version .....)
+- Subread       (latest version ..... | paper version .....)
+- DESeq2        (latest version ..... | paper version .....)
+- R             (latest version ..... | paper version .....)
 
 ## Architecture du projet
 

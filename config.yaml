@@ -7,6 +7,12 @@ resources: "resources"
 # Here you can set the number of threads to use for snakemake
 threads: 8
 
+# Here you can see the version of the workflow that is used to run the analysis
+# You can either run the "latest" version or the "paper" version
+# Uncomment the version you want to use
+version: "latest"
+# version: "paper"
+
 # Here you can change the accessions to download
 samples:
   # The tree experiments
