@@ -26,5 +26,3 @@ RUN apk add --no-cache \
     && apk del build-base \
     && apk del zlib-dev \
     && apk del wget
-
-
