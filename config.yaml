@@ -34,7 +34,6 @@ containers:
   # bowtie: docker://juldpnt/reprohackaton_8:bowtie-0.12.7 # TODO DEBUG
   # bowtie: "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
   
-  # subread: docker://juldpnt/reprohackaton_8:subread-2.0.6 # TODO: DEBUG 
-  # subread: DEBUG docker://juldpnt/reprohackaton_8:subread-1.4.6-p3 #TODO: DEBUG
-  subread: "docker://biocontainers/subread:v1.6.3dfsg-1-deb_cv1"
+  subread: docker://juldpnt/reprohackaton_8:subread-2.0.6 # TODO: DEBUG 
+  # subread: docker://juldpnt/reprohackaton_8:subread-1.4.6-p3 #TODO: DEBUG
   Rscript: "docker://juldpnt/reprohackaton_8:deseq2"
