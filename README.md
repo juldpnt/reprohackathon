@@ -18,14 +18,14 @@
 
 ## Outils
 
-- Docker        (version  )
-- Snakemake     (version  )
-- Apptainer     (version  )
+- Docker        (version 24.0.7)
+- Snakemake     (version 7.32.4)
+- Apptainer     (version 1.2.4)
 - SRA Toolkit   (version 3.0.7)
 - Bowtie        (latest version 1.2.2 | paper version 0.12.7)
 - TrimGalore    (latest version 0.6.10 | paper version unknown)
-- Cutadapt      (latest version ..... | paper version .....)
-- Subread       (latest version ..... | paper version .....)
+- Cutadapt      (latest version ..... | paper version 4.2)
+- Subread       (latest version 2.0.6 | paper version 1.4.6)
 - DESeq2        (latest version ..... | paper version .....)
 - R             (latest version ..... | paper version .....)
 
