@@ -18,8 +18,8 @@ THREADS = config["threads"]
 BASE = config["containers"]["base"]
 SRATOOLKIT = config["containers"]["sratoolkit"]
 TRIMGALORE = config["containers"]["trimgalore"]
-BOWTIE = config["containers"]["bowtie"]
-SUBREAD = config["containers"]["subread"]
+BOWTIE = config["containers"]["bowtie"]["paper"]
+SUBREAD = config["containers"]["subread"]["paper"]
 RSCRIPT = config["containers"]["Rscript"]
 
 # -------- Target rules
@@ -142,7 +142,8 @@ rule mapping:
         BOWTIE
     shell:
         """
-        bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
+        bowtie -p 4 -S {input.genome_index}/reference <(gunzip -c {input.trimmed}) | samtools sort -@ 4 > {output.mapped}
+        samtools index {output.mapped}
         """
 
 # --------  APPLY FOLLOWING RULES ONCE AFTER ALL SAMPLES ARE PROCESSED
@@ -159,7 +160,7 @@ rule count:
         SUBREAD
     shell:
         """
-        featureCounts --extraAttributes Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
+        featureCounts Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
         """
 
 rule scriptR:
