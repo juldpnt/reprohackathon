@@ -142,8 +142,7 @@ rule mapping:
         BOWTIE
     shell:
         """
-        bowtie -p 4 -S {input.genome_index}/reference <(gunzip -c {input.trimmed}) | samtools sort -@ 4 > {output.mapped}
-        samtools index {output.mapped}
+        bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
         """
 
 # --------  APPLY FOLLOWING RULES ONCE AFTER ALL SAMPLES ARE PROCESSED
