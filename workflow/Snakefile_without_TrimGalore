@@ -94,24 +94,24 @@ rule get_fastq_files:
         fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
         """
 
-rule trimming:
-    """
-    This rule is responsible for trimming the fastq files for each sample using trim galore container.
-    """
-    input:
-        fastq= TMP + "/raw_fastq/{sample}.fastq"
-    output:
-        fq= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
-        report= TMP + "/trimmed_fastq/{sample}_trimming_report.txt"
-    container:
-        TRIMGALORE
-    shell:
-        # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
-        """
-        trim_galore -q 20 --phred33 --length 25 {input.fastq}
-        mv {wildcards.sample}_trimmed.fq {output.fq}
-        mv {wildcards.sample}.fastq_trimming_report.txt {output.report}
-        """
+# rule trimming:
+#     """
+#     This rule is responsible for trimming the fastq files for each sample using trim galore container.
+#     """
+#     input:
+#         fastq= TMP + "/raw_fastq/{sample}.fastq"
+#     output:
+#         fq= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+#         report= TMP + "/trimmed_fastq/{sample}_trimming_report.txt"
+#     container:
+#         TRIMGALORE
+#     shell:
+#         # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
+#         """
+#         trim_galore -q 20 --phred33 --length 25 {input.fastq}
+#         mv {wildcards.sample}_trimmed.fq {output.fq}
+#         mv {wildcards.sample}.fastq_trimming_report.txt {output.report}
+#         """
 
 rule create_index:
     """
@@ -134,7 +134,7 @@ rule mapping:
     This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
     """
     input:
-        trimmed= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        trimmed= TMP + "/raw_fastq/{sample}.fastq",
         genome_index= TMP + "/genome_index"
     output:
         mapped= TMP + "/mapped_reads/{sample}_mapped.sam"

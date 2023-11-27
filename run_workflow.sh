@@ -2,7 +2,8 @@
 
 # Modify this variable to change the number of cores used by snakemake
 cores=$(grep 'threads:' config.yaml | awk '{print $2}')
-snakefile="workflow/Snakefile_${1:-paper}"
+# snakefile="workflow/Snakefile_${1:-paper}"
+snakefile="workflow/Snakefile_${1:-without_TrimGalore}"
 
 # Check if the second argument is -clear
 if [ "${2:-}" = "-clear" ]
