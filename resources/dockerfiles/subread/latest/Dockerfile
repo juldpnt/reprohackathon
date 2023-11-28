@@ -9,6 +9,7 @@ RUN apk add --no-cache \
         build-base \
         wget \
         zlib-dev \
+        bash \
     && cd /home/ \
     # Then we download subread, extract it and compile it from sources
     && wget -q https://downloads.sourceforge.net/project/subread/subread-${VERSION}/subread-${VERSION}-source.tar.gz \

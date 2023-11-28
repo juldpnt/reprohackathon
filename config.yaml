@@ -36,11 +36,10 @@ containers:
   sratoolkit: "docker://juldpnt/reprohackaton_8:sratoolkit-3.0.7"
   trimgalore: "docker://mattverlynde/trimgalore:trimgalore-0.6.10-cutadapt-4.2-fastqc-0.11.7"
   
-  bowtie: docker://juldpnt/reprohackaton_8:bowtie-1.2.2 # WORKS
-  # bowtie: docker://juldpnt/reprohackaton_8:bowtie-0.12.7 # TODO DEBUG
-  # bowtie: "docker://biocontainers/bowtie:v1.2.2dfsg-4-deb_cv1"
-  
-  # subread: docker://juldpnt/reprohackaton_8:subread-2.0.6 # TODO: DEBUG 
-  # subread: DEBUG docker://juldpnt/reprohackaton_8:subread-1.4.6-p3 #TODO: DEBUG
-  subread: "docker://biocontainers/subread:v1.6.3dfsg-1-deb_cv1"
+  bowtie: 
+    latest: "docker://juldpnt/reprohackaton_8:bowtie-1.2.2"
+    paper: "docker://mattverlynde/bowtie:bowtie-0.12.7"
+  subread: 
+    latest: "docker://juldpnt/reprohackaton_8:subread-2.0.6"
+    paper: "docker://juldpnt/reprohackaton_8:subread-1.4.6-p3" 
   Rscript: "docker://juldpnt/reprohackaton_8:deseq2"
