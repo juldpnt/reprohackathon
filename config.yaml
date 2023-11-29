@@ -13,6 +13,10 @@ threads: 8
 version: "latest"
 # version: "paper"
 
+# Here you can decide whether you want to use the trimming step or not
+# If you want to use it, set it to true. If not, set it to false
+with_trimming: false
+
 # Here you can change the accessions to download
 samples:
   # The tree experiments
@@ -35,10 +39,11 @@ containers:
   base: "docker://juldpnt/reprohackaton_8:alpine"
   sratoolkit: "docker://juldpnt/reprohackaton_8:sratoolkit-3.0.7"
   trimgalore: "docker://mattverlynde/trimgalore:trimgalore-0.6.10-cutadapt-4.2-fastqc-0.11.7"
-  
+  # bowtie container differs between latest and paper version
   bowtie: 
     latest: "docker://juldpnt/reprohackaton_8:bowtie-1.2.2"
     paper: "docker://mattverlynde/bowtie:bowtie-0.12.7"
+  # subread container differs between latest and paper version
   subread: 
     latest: "docker://juldpnt/reprohackaton_8:subread-2.0.6"
     paper: "docker://juldpnt/reprohackaton_8:subread-1.4.6-p3" 
