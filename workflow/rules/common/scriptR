@@ -1,0 +1,18 @@
+rule scriptR:
+    """
+    This rule is responsible for running the R script that will generate the final plots.
+    """
+    input:
+        counts= TMP + "/counts.txt"
+    output:
+        expand(RESULTS + "/{plot}.png", plot=PLOTS)
+    container:
+        RSCRIPT
+    shell:
+        # This script will generate the final plots and move them to the results folder
+        # All files that ends with plot.png are moved to the results folder
+        """
+        mkdir -p {RESULTS}
+        Rscript {WORKFLOW}/scripts/deseq2_script.R {input.counts}
+        mv *plot.png {RESULTS}
+        """

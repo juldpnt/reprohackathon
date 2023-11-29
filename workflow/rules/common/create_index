@@ -1,0 +1,15 @@
+rule create_index:
+    """
+    This rule is responsible for creating the index for the reference genome using bowtie container.
+    """
+    input:
+        reference= TMP + "/reference.fasta"
+    output:
+        directory(TMP + "/genome_index")
+    container:
+        BOWTIE
+    shell:
+        """
+        mkdir -p {output}
+        bowtie-build {input.reference} {output}/reference
+        """

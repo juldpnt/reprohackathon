@@ -1,0 +1,15 @@
+rule download_reference_genome:
+    """
+    This rule is responsible for downloading the reference genome.
+    """
+    output:
+        reference= TMP + "/reference.fasta",
+    container:
+        BASE
+    shell:
+        # The files are downloaded using wget and then moved to the tmp folder 
+        """
+        mkdir -p {TMP}
+        wget -O reference.fasta "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/efetch.fcgi?db=nuccore&id=CP000253.1&rettype=fasta"
+        mv reference.fasta {output.reference}
+        """

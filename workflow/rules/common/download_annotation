@@ -1,0 +1,15 @@
+rule download_annotation:
+    """
+    This rule is responsible for downloading the annotation file.
+    """
+    output:
+        annotation= TMP + "/annots.gff"
+    container:
+        BASE
+    shell:
+        # The file is downloaded using wget and then moved to the tmp folder 
+        """
+        mkdir -p {TMP}
+        wget -O annots.gff "https://www.ncbi.nlm.nih.gov/sviewer/viewer.cgi?db=nuccore&report=gff3&id=CP000253.1"
+        mv annots.gff {output.annotation}
+        """

@@ -1,0 +1,18 @@
+rule trimming:
+    """
+    This rule is responsible for trimming the fastq files for each sample using trim galore container.
+    """
+    input:
+        fastq= TMP + "/raw_fastq/{sample}.fastq"
+    output:
+        fq= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        report= TMP + "/trimmed_fastq/{sample}_trimming_report.txt"
+    container:
+        TRIMGALORE
+    shell:
+        # The fastq files are trimmed usgin trim galore, the output files are then moved to the tmp folder
+        """
+        trim_galore -q 20 --phred33 --length 25 {input.fastq}
+        mv {wildcards.sample}_trimmed.fq {output.fq}
+        mv {wildcards.sample}.fastq_trimming_report.txt {output.report}
+        """

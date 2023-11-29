@@ -1,0 +1,15 @@
+rule mapping:
+    """
+    This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
+    """
+    input:
+        trimmed= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        genome_index= TMP + "/genome_index"
+    output:
+        mapped= TMP + "/mapped_reads/{sample}_mapped.sam"
+    container: 
+        BOWTIE
+    shell:
+        """
+        bowtie --no-unal --threads 4 --sam {input.genome_index}/reference {input.trimmed} {output.mapped}
+        """
