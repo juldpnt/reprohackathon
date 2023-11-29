@@ -53,23 +53,27 @@ resultats$baseMean <- log2(resultats$baseMean)
 
 # Alternative result tables with different shrinkage methods
 resultatsApeShrink <- lfcShrink(dataSet, coef="condition_temoin_vs_exp", type="apeglm")
-resultatsApeShrinkLog <- resultatsApeShrink
-resultatsApeShrinkLog$baseMean <- log2(resultatsApeShrinkLog$baseMean)
+resultatsApeShrink$baseMean <- log2(resultatsApeShrink$baseMean)
 
 resultatsAshrShrink <- lfcShrink(dataSet, coef="condition_temoin_vs_exp", type="ashr")
-resultatsAshrShrinkLog <- resultatsAshrShrink
-resultatsAshrShrinkLog$baseMean <- log2(resultatsAshrShrinkLog$baseMean)
+resultatsAshrShrink$baseMean <- log2(resultatsAshrShrink$baseMean)
 
 # Transforming the count data to reduce variance in small values and "highlight" outliers
 rld <- rlogTransformation(dataSet)
 
 # p-value adjustment
 resultats$padj <- p.adjust(resultats$pvalue, method = "BH")
+resultatsApeShrink$padj <- p.adjust(resultatsApeShrink$pvalue, method = "BH")
+resultatsAshrShrink$padj <- p.adjust(resultatsAshrShrink$pvalue, method = "BH")
 
 # Converting the results to a dataframe for use in ggplot
 resultats <- data.frame(resultats)
+resultatsApeShrink <- data.frame(resultatsApeShrink)
+resultatsAshrShrink <- data.frame(resultatsAshrShrink)
 
 colnames(resultats)[1] <- "log2BaseMean"
+colnames(resultatsApeShrink)[1] <- "log2BaseMean"
+colnames(resultatsAshrShrink)[1] <- "log2BaseMean"
 
 # List of genes we want to have labeled on the MA-plot
 nameofinterestlist <- list(list("SAOUHSC_01246", "infB"),
@@ -90,6 +94,8 @@ genesToLabel$label <- nameofinterestlist$X2[match(rownames(genesToLabel), nameof
 
 # Adding a "label" column to the results table so that the information for the graph is contained within a single dataframe
 resultats$label <- genesToLabel$label[match(rownames(resultats), rownames(genesToLabel))]
+resultatsApeShrink$label <- genesToLabel$label[match(rownames(resultatsApeShrink), rownames(genesToLabel))]
+resultatsAshrShrink$label <- genesToLabel$label[match(rownames(resultatsAshrShrink), rownames(genesToLabel))]
 
 # Plotting log-fold change on a MA-plot
 # Opening a PNG file to "fill"
@@ -101,7 +107,6 @@ png("MA_plot.png")
 # For additional ggplot functionality
 library(ggrepel)
 
-
 ggplot(resultats, mapping = aes(x=log2BaseMean, y=log2FoldChange)) + # Initial empty plot
   geom_point(aes(color = padj < 0.05), shape = 16, cex = 1.5) + # Adding the points with a condition for colour on p-value significance
   scale_color_manual(values = c("black", "red")) +
@@ -110,9 +115,36 @@ ggplot(resultats, mapping = aes(x=log2BaseMean, y=log2FoldChange)) + # Initial e
                    aes(label = label), # Ugly but functional (should maybe have called the label column a different way)
                    box.padding = unit(0.5, "lines"),
                    point.padding = unit(0.3, "lines"))
-  
 
 # Closing the PNG file
+dev.off()
+
+png("MA_apeshrink_plot.png")
+
+ggplot(resultatsApeShrink, mapping = aes(x=log2BaseMean, y=log2FoldChange)) + # Initial empty plot
+  geom_point(aes(color = padj < 0.05), shape = 16, cex = 1.5) + # Adding the points with a condition for colour on p-value significance
+  scale_color_manual(values = c("black", "red")) +
+  geom_hline(yintercept = 0, linetype = "dashed") + # A line to divide the points between negative and positive lfc
+  geom_label_repel(data = resultatsApeShrink[match(nameofinterestlist$X2, resultatsApeShrink$label),], # Labelling the genes of interest
+                   aes(label = label), # Ugly but functional (should maybe have called the label column a different way)
+                   box.padding = unit(0.5, "lines"),
+                   point.padding = unit(0.3, "lines")) +
+  expand_limits(y = c(-5.5, 5.5))
+
+dev.off()
+
+png("MA_ashrshrink_plot.png")
+
+ggplot(resultatsAshrShrink, mapping = aes(x=log2BaseMean, y=log2FoldChange)) + # Initial empty plot
+  geom_point(aes(color = padj < 0.05), shape = 16, cex = 1.5) + # Adding the points with a condition for colour on p-value significance
+  scale_color_manual(values = c("black", "red")) +
+  geom_hline(yintercept = 0, linetype = "dashed") + # A line to divide the points between negative and positive lfc
+  geom_label_repel(data = resultatsAshrShrink[match(nameofinterestlist$X2, resultatsAshrShrink$label),], # Labelling the genes of interest
+                   aes(label = label), # Ugly but functional (should maybe have called the label column a different way)
+                   box.padding = unit(0.5, "lines"),
+                   point.padding = unit(0.3, "lines")) +
+  expand_limits(y = c(-5.5, 5.5))
+
 dev.off()
 
 png("PCA_plot.png")
