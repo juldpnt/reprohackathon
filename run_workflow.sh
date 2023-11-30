@@ -3,7 +3,7 @@
 # Modify the config.yaml file to change the following parameters:
 cores=$(grep 'threads:' config.yaml | awk '{print $2}')
 version=$(grep 'version:' config.yaml | awk '{print $2}')
-with_trimgalore=$(grep 'with_trimgalore:' config.yaml | awk '{print $2}')
+with_trimgalore=$(grep 'with_trimming:' config.yaml | awk '{print $2}')
 
 # Add arguments to the command line
 for arg in "$@"
@@ -23,7 +23,9 @@ echo " ----------- Reprohackathon 2023 : groupe 8 -----------"
 echo
 echo "Snakemake AND Apptainer should be installed before running this script"
 echo "The default number of cores is $cores, but can be changed in the config.yaml file"
-echo "The default Snakefile is $snakefile, but can be changed by passing either 'latest' or 'paper' as an argument"
+echo "The default Snakefile version is $version, but can be changed in the config.yaml file"
+echo "Is Trimming applied ? ${with_trimgalore} ! This can be changed in the config.yaml file"
+echo
 echo "To clear the results and tmp folders, pass '-clear' as a second argument"
 echo
 echo
