@@ -11,7 +11,7 @@ rule mapping:
         BOWTIE
     shell:
         """
-        bowtie -p 4 -S {input.genome_index}/reference <(gunzip -c {input.trimmed}) | samtools sort -@ 4 > {output.mapped}
+        bowtie -p 4 -S {input.genome_index}/reference {input.trimmed} | samtools sort -@ 4 > {output.mapped}
         samtools index {output.mapped}
         """
         

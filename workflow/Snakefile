@@ -44,6 +44,11 @@ rule all:
 
 # -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
 
+# These files are stored in the resources folder
+# If not deleted manually, they will not be downloaded again
+# This is to avoid having errors if the server is down 
+# (which happened many times during the development)
+
 include: "rules/common/download_reference_genome"
 
 include: "rules/common/download_annotation"

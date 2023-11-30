@@ -8,13 +8,13 @@ rule get_fastq_files:
     container: 
         SRATOOLKIT
     shell:
-        # """
-        # mkdir -p {TMP}/raw_fastq
-        # fasterq-dump --threads {THREADS} --progress {wildcards.sample}
-        # mv {wildcards.sample}.fastq {output.fastq}
-        # """
+        """
+        mkdir -p {TMP}/raw_fastq
+        fasterq-dump --threads {THREADS} --progress {wildcards.sample}
+        mv {wildcards.sample}.fastq {output.fastq}
+        """
         # Uncomment the lines below to download only 1000 reads per accession with the -X 1000 arg and comment the lines above
         # If you want to download all reads just remove the -X 1000 arg
-        """
-        fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
-        """
+        # """
+        # fastq-dump --stdout -X 1000 {wildcards.sample} > {output.fastq}
+        # """
