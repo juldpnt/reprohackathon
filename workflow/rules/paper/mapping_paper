@@ -3,7 +3,7 @@ rule mapping:
     This rule is responsible for mapping the trimmed fastq files to the reference genome using bowtie container.
     """
     input:
-        trimmed= TMP + "/trimmed_fastq/{sample}_trimmed.fq",
+        trimmed= TMP + bowtie_input_dir + "/{sample}" + bowtie_input_suffix,
         genome_index= TMP + "/genome_index"
     output:
         mapped= TMP + "/mapped_reads/{sample}_mapped.sam"
@@ -14,3 +14,4 @@ rule mapping:
         bowtie -p 4 -S {input.genome_index}/reference <(gunzip -c {input.trimmed}) | samtools sort -@ 4 > {output.mapped}
         samtools index {output.mapped}
         """
+        

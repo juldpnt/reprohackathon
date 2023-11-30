@@ -1,0 +1,86 @@
+configfile: "config.yaml"
+
+# -------- Global variables
+
+# Define the version of the workflow
+VERSION = config["version"]
+WITH_TRIMMING = config["with_trimming"]
+
+# Define the input and outputs
+
+SAMPLES = config["samples"]
+PLOTS = config["plots"]
+
+# Define the folders
+
+TMP = config["tmp"]
+RESULTS = config["results"]
+WORKFLOW = config["workflow"]
+THREADS = config["threads"]
+
+# Define the container images
+BASE = config["containers"]["base"]
+SRATOOLKIT = config["containers"]["sratoolkit"]
+TRIMGALORE = config["containers"]["trimgalore"]
+BOWTIE = config["containers"]["bowtie"][VERSION]
+SUBREAD = config["containers"]["subread"][VERSION]
+RSCRIPT = config["containers"]["Rscript"]
+
+# -------- Target rules
+
+rule all:
+    """
+    Target rule, the input is the output of the DAG made by snakemake
+    Comment/Uncomment lines below to change the target rule for debugging purposes
+    """
+    input:
+        # TMP + "/reference.fasta", TMP + "/annots.gff", 
+        # expand(TMP + "/raw_fastq/{sample}.fastq", sample=SAMPLES),
+        # TMP + "/genome_index", 
+        # expand(TMP + "/mapped_reads/{sample}_mapped.sam", sample=SAMPLES),
+        # TMP + "/counts.txt", 
+        expand(RESULTS + "/{plot}.png", plot=PLOTS)
+
+# -------- DOWNLOADING REFERENCE GENOME AND ANNOTATION FILES
+
+include: "rules/common/download_reference_genome"
+
+include: "rules/common/download_annotation"
+
+# --------  APPLY FOLLOWING RULES TO EACH SAMPLE
+
+include: "rules/common/get_fastq_files"
+
+# If trimming is enabled, include the trimming rules,
+# Depending of this choice, the input files for bowtie will be different
+if WITH_TRIMMING:
+    include: "rules/common/trimming"
+    bowtie_input_dir = "/trimmed_fastq"
+    bowtie_input_suffix = "_trimmed.fq"
+elif not WITH_TRIMMING:
+    bowtie_input_dir = "/raw_fastq"
+    bowtie_input_suffix = ".fastq"
+else:
+    raise ValueError("with_trimming must be true or false")
+
+include: "rules/common/create_index"
+
+# The mapping rule is different depending on the version used
+if VERSION == "latest":
+    include: "rules/latest/mapping_latest"
+elif VERSION == "paper":
+    include: "rules/paper/mapping_paper"
+else:
+    raise ValueError("version must be latest or paper")
+
+# --------  APPLY FOLLOWING RULES ONCE AFTER ALL SAMPLES ARE PROCESSED
+
+# The mapping rule is different depending on the version used
+if VERSION == "latest":
+    include: "rules/latest/count_latest"
+elif VERSION == "paper":
+    include: "rules/paper/count_paper"
+else:
+    raise ValueError("version must be latest or paper")
+
+include: "rules/common/scriptR"
