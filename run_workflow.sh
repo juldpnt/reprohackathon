@@ -1,16 +1,20 @@
 # ----------- Snakemake workflow for running the analysis
 
-# Modify this variable to change the number of cores used by snakemake
+# Modify the config.yaml file to change the following parameters:
 cores=$(grep 'threads:' config.yaml | awk '{print $2}')
-# snakefile="workflow/Snakefile_${1:-paper}"
-snakefile="workflow/Snakefile_${1:-without_TrimGalore}"
+version=$(grep 'version:' config.yaml | awk '{print $2}')
+with_trimgalore=$(grep 'with_trimgalore:' config.yaml | awk '{print $2}')
 
-# Check if the second argument is -clear
-if [ "${2:-}" = "-clear" ]
-then
-    rm -rf results
-    rm -rf tmp
-fi
+# Add arguments to the command line
+for arg in "$@"
+do
+    if [ "$arg" = "-clear" ]
+    then
+        rm -rf results
+        rm -rf tmp
+        break
+    fi
+done
 
 # Message to the user
 
@@ -27,4 +31,4 @@ echo " ------------------------------------------------------"
 echo
 
 # Run the workflow
-snakemake -s $snakefile --cores $cores -r -p --use-singularity
+snakemake --cores $cores -r -p --use-singularity

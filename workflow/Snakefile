@@ -17,6 +17,7 @@ TMP = config["tmp"]
 RESULTS = config["results"]
 WORKFLOW = config["workflow"]
 THREADS = config["threads"]
+RESOURCES = config["resources"]
 
 # Define the container images
 BASE = config["containers"]["base"]

@@ -3,7 +3,7 @@ rule count:
     This rule is responsible for counting the reads mapped to each gene using featureCounts container.
     """
     input:
-        reference= TMP +"/annots.gff",
+        reference= RESOURCES +"/annots.gff",
         mapped_sam_files=expand(TMP + "/mapped_reads/{sample}_mapped.sam", sample=SAMPLES)
     output:
         counted= TMP + "/counts.txt"

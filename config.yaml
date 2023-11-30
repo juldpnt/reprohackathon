@@ -10,12 +10,11 @@ threads: 8
 # Here you can see the version of the workflow that is used to run the analysis
 # You can either run the "latest" version or the "paper" version
 # Uncomment the version you want to use
-version: "latest"
-# version: "paper"
+version: "paper"
 
 # Here you can decide whether you want to use the trimming step or not
-# If you want to use it, set it to true. If not, set it to false
-with_trimming: false
+# If you want to use it, set it to "true". If not, set it to "false"
+with_trimming: true
 
 # Here you can change the accessions to download
 samples:
