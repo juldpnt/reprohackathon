@@ -11,5 +11,5 @@ rule count:
         SUBREAD
     shell:
         """
-        featureCounts Name -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
+        featureCounts -t gene -g ID -F GTF -T 3 -a {input.reference} -o {output.counted} {input.mapped_sam_files}
         """
