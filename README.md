@@ -22,12 +22,13 @@
 - Snakemake     (version 7.32.4)
 - Apptainer     (version 1.2.4)
 - SRA Toolkit   (version 3.0.7)
-- Bowtie        (latest version 1.2.2 | paper version 0.12.7)
-- TrimGalore    (latest version 0.6.10 | paper version unknown)
-- Cutadapt      (latest version ..... | paper version 4.2)
-- Subread       (latest version 2.0.6 | paper version 1.4.6)
-- DESeq2        (latest version ..... | paper version .....)
-- R             (latest version ..... | paper version .....)
+- Bowtie        (latest version 1.2.2   | paper version 0.12.7)
+- TrimGalore    (latest version 0.6.10  | paper version unknown)
+- FastQC        (latest version 0.12.1  | paper version 0.11.7)
+- Cutadapt      (latest version 4.6     | paper version 4.2)
+- Subread       (latest version 2.0.6   | paper version 1.4.6)
+- DESeq2        (latest version 1.42.0  | paper version unknown)
+- R             (latest version 4.3.2   | paper version unknown)
 
 ## Architecture du projet
 
