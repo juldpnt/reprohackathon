@@ -12,9 +12,14 @@ On utilise l'API de KEGG pour obtenir directement les locus associé à des fonc
 
 Depuis la base de données BRITE :
 Pour obtenir les codes de ces fonctions, on recherche https://rest.kegg.jp/list/brite/sao (avec sao notre souche d'intérêt ici).
-Pour obtenir les genes associés aux fonctions d'intérêt, on recherche :
+Pour obtenir les genes associés aux fonctions de TRANSCRIPTION, on recherche :
 https://rest.kegg.jp/link/sao/br:sao03000 avec sao03000 ici le code associé à la fonction "Transcription factors - Staphylococcus aureus subsp. aureus NCTC8325"
 https://rest.kegg.jp/link/sao/br:sao03021 avec sao03021 ici le code associé à la fonction "Transcription machinery - Staphylococcus aureus subsp. aureus NCTC8325"
+
+Pour obtenir les genes associés aux fonctions de TRADUCTION, on recherche :
+https://rest.kegg.jp/link/sao/br:sao03009 avec sao03009 ici le code associé à la fonction "Ribosome biogenesis - Staphylococcus aureus subsp. aureus NCTC8325"
+https://rest.kegg.jp/link/sao/br:sao03011 avec sao03011 ici le code associé à la fonction "Ribosome - Staphylococcus aureus subsp. aureus NCTC8325"
+https://rest.kegg.jp/link/sao/br:sao03012 avec sao03012 ici le code associé à la fonction "Translation factors - Staphylococcus aureus subsp. aureus NCTC8325"
 
 Depuis la base de données PATHWAYS :
 Pour obtenir les codes de ces fonctions, on recherche https://rest.kegg.jp/list/pathway/sao (avec sao notre souche d'intérêt ici).
