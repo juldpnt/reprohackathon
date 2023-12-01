@@ -21,3 +21,12 @@ RUN R -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/")'
 
 # Install DESeq2 package from Bioconductor
 RUN R -e 'BiocManager::install("DESeq2")'
+
+# Install ggrepel
+RUN R -e 'install.packages("ggrepel", repos="https://cloud.r-project.org/")'
+
+# Install EnhancedVolcano
+RUN R -e 'install.packages("EnhancedVolcano", repos="https://cloud.r-project.org/")'
+
+# Install ggplot2
+RUN R -e 'install.packages("ggplot2", repos="https://cloud.r-project.org/")'
