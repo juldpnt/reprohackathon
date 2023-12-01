@@ -26,7 +26,7 @@ RUN R -e 'BiocManager::install("DESeq2")'
 RUN R -e 'install.packages("ggrepel", repos="https://cloud.r-project.org/")'
 
 # Install EnhancedVolcano
-RUN R -e 'install.packages("EnhancedVolcano", repos="https://cloud.r-project.org/")'
+RUN R -e 'BiocManager::install("EnhancedVolcano")'
 
 # Install ggplot2
 RUN R -e 'install.packages("ggplot2", repos="https://cloud.r-project.org/")'
