@@ -10,7 +10,7 @@ threads: 8
 # Here you can see the version of the workflow that is used to run the analysis
 # You can either run the "latest" version or the "paper" version
 # Uncomment the version you want to use
-version: "paper"
+version: latest
 
 # Here you can decide whether you want to use the trimming step or not
 # If you want to use it, set it to "true". If not, set it to "false"
@@ -30,8 +30,11 @@ samples:
 # Here you can change the desired plots
 plots:
  - "MA_plot"
-#  - "PCA_plot"
-#  - "Volcano_plot"
+ - "PCA_plot"
+ - "Volcano_plot"
+ - "MA_allgenes_plot"
+ - "MA_apeshrink_plot"
+ - "MA_ashrshrink_plot"
 
 # Here you can change the containers to use
 containers:

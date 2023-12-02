@@ -1,32 +1,41 @@
 # ----------- Snakemake workflow for running the analysis
 
-# Modify the config.yaml file to change the following parameters:
+# Default values
 cores=$(grep 'threads:' config.yaml | awk '{print $2}')
 version=$(grep 'version:' config.yaml | awk '{print $2}')
 with_trimgalore=$(grep 'with_trimming:' config.yaml | awk '{print $2}')
 
-# Add arguments to the command line
-for arg in "$@"
+# Handle command-line arguments
+while getopts v:t:c:h flag
 do
-    if [ "$arg" = "-clear" ]
-    then
-        rm -rf results
-        rm -rf tmp
-        break
-    fi
+    case "${flag}" in
+        v) version=${OPTARG};;
+        t) with_trimgalore=${OPTARG};;
+        c) cores=${OPTARG};;
+        h) echo "Usage: $0 [-v version] [-t with_trimgalore] [-c cores]"
+           echo " -v: Set the version in the config.yaml file (latest or paper)"
+           echo " -t: Set whether trimgalore is used in the config.yaml file (true or false)"
+           echo " -c: Set the number of cores to use for the workflow (integer)"
+           echo " -h: Display this help message"
+           exit 0;;
+    esac
 done
 
-# Message to the user
+# Update config.yaml with new values
+sed -i "s/^version: .*/version: $version/" config.yaml
+sed -i "s/^with_trimming: .*/with_trimming: $with_trimgalore/" config.yaml
+sed -i "s/^threads: .*/threads: $cores/" config.yaml
 
+# Message to the user
 echo
 echo " ----------- Reprohackathon 2023 : groupe 8 -----------"
 echo
 echo "Snakemake AND Apptainer should be installed before running this script"
-echo "The default number of cores is $cores, but can be changed in the config.yaml file"
-echo "The default Snakefile version is $version, but can be changed in the config.yaml file"
-echo "Is Trimming applied ? ${with_trimgalore} ! This can be changed in the config.yaml file"
+echo "The number of cores is $cores"
+echo "The Snakefile version is $version"
+echo "Is Trimming applied ? ${with_trimgalore}"
 echo
-echo "To clear the results and tmp folders, pass '-clear' as a second argument"
+echo "To change these values, pass '-v <version>', '-t <trimming>', '-c <cores>' as arguments"
 echo
 echo
 echo " ------------------------------------------------------"
