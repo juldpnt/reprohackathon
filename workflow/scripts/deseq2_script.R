@@ -1,6 +1,8 @@
+# Importing arguments
+args = commandArgs(trailingOnly=TRUE)
 
 # Importing the count matrix
-subreadCounts <- read.table("/tmp/counts.txt", header = TRUE, sep = '\t', row.names = 1)
+subreadCounts <- read.table(args[1], header = TRUE, sep = '\t', row.names = 1)
 
 # Setting new column names
 new_colnames <- c("SRR10379721",
@@ -25,7 +27,7 @@ subreadCounts <- as.matrix(subreadCounts)
 # Importing the genes of interest and preparing the table for merging
 rownames(subreadCounts) <- sub("gene-","",rownames(subreadCounts))
 
-kegg <- read.table("/resources/names_genes/locus_translation.txt", header = FALSE, sep = ":", fill=TRUE)
+kegg <- read.table(args[2], header = FALSE, sep = ":", fill=TRUE)
 
 kegg <- kegg[,3]
 
