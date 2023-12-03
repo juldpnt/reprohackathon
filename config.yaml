@@ -49,4 +49,4 @@ containers:
   subread: 
     latest: "docker://juldpnt/reprohackaton_8:subread-2.0.6"
     paper: "docker://juldpnt/reprohackaton_8:subread-1.4.6-p3" 
-  Rscript: "docker://juldpnt/reprohackaton_8:deseq2"
+  Rscript: "docker://mattverlynde/deseq2:deseq2_v2"
