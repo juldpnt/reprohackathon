@@ -22,6 +22,12 @@ RUN R -e 'install.packages("BiocManager", repos="https://cloud.r-project.org/")'
 # Install DESeq2 package from Bioconductor
 RUN R -e 'BiocManager::install("DESeq2")'
 
+# Install apeglm package from Bioconductor
+RUN R -e 'BiocManager::install("apeglm")'
+
+# Install ashr
+RUN R -e 'install.packages("ashr", repos="https://cloud.r-project.org/")'
+
 # Install ggrepel
 RUN R -e 'install.packages("ggrepel", repos="https://cloud.r-project.org/")'
 
